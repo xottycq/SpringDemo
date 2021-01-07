@@ -1,5 +1,5 @@
-<%@ page import="com.example.demospringmvc.UserList" %>
-<%@ page import="com.example.demospringmvc.User" %>
+<%@ page import="com.example.demospringmvc.pojo.UserList" %>
+<%@ page import="com.example.demospringmvc.pojo.User" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>

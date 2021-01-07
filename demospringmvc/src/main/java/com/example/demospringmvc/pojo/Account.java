@@ -1,6 +1,5 @@
-package com.example.demospringmvc;
+package com.example.demospringmvc.pojo;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 
 @Controller("account")

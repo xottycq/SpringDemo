@@ -1,8 +1,11 @@
 /**
  * Attribute优先顺序：Model/ModelMap.addAttribute-->request.setAttribute-->request.getSession.setAttribute
  */
-package com.example.demospringmvc;
+package com.example.demospringmvc.controller;
 
+import com.example.demospringmvc.pojo.Account;
+import com.example.demospringmvc.pojo.User;
+import com.example.demospringmvc.pojo.UserList;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -30,11 +33,6 @@ public class ControllerParam  implements ApplicationContextAware {
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         context=(WebApplicationContext) applicationContext;
     }
-
-    //数组
-    //集合
-
-    //---------File  Download/Upload-----------
 
     @RequestMapping("")
     public String controller() {
@@ -351,4 +349,8 @@ public class ControllerParam  implements ApplicationContextAware {
         System.out.println("@RequestBody2" + "-----------" +user);
         return user;
     }
+
+
+    //---------File  Download/Upload-----------
+
 }

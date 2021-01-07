@@ -1,4 +1,4 @@
-package com.example.demospringmvc;
+package com.example.demospringmvc.controller;
 
 import org.springframework.web.servlet.mvc.Controller;
 import org.springframework.web.servlet.ModelAndView;
@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class HelloControllerByXml implements Controller{
-
     @Override
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) {
         System.out.println("HelloControllerByXml----Hello Spring MVC!");

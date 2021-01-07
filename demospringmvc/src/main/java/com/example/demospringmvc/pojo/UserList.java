@@ -1,4 +1,4 @@
-package com.example.demospringmvc;
+package com.example.demospringmvc.pojo;
 
 import org.springframework.stereotype.Controller;
 
