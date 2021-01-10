@@ -2,34 +2,44 @@ package com.example.demospringmvc.pojo;
 
 import org.springframework.stereotype.Controller;
 
-@Controller("account")
+//@Controller("account")
 public class Account {
-
+    private int id;
     private User user;
-    private String password;
+    private float balance;
 
     public User getUser() {
         return user;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setUser(User user) {
         this.user = user;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     public Account(){
         super();
      }
 
+    public float getBalance() {
+        return balance;
+    }
+
+    public void setBalance(float balance) {
+        this.balance = balance;
+    }
+
     @Override
     public String toString(){
-        return "Account(name="+user.getName()+",age="+user.getAge()+",password="+password+")";
+        return "Account(name="+user.getName()+",age="+user.getAge()+",balance="+balance+")";
     }
+
 }

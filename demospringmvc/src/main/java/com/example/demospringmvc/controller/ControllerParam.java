@@ -27,15 +27,15 @@ import java.util.Map;
 @RequestMapping("/controller")
 @SessionAttributes("xuser")
 public class ControllerParam  implements ApplicationContextAware {
-    private WebApplicationContext context;
+    private ApplicationContext context;
 
     @Override    //这个是ApplicationContextAware 要实现的接口
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        context=(WebApplicationContext) applicationContext;
+        context= applicationContext;
     }
 
     @RequestMapping("")
-    public String controller() {
+    public String controllers() {
     return "controller";
     }
 

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+   http://www.springframework.org/schema/context
+   http://www.springframework.org/schema/context/spring-context-4.0.xsd
+   http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd
+    http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+<!--    <mvc:annotation-driven/>-->
+    <context:component-scan base-package="com.example.demospringmvc"/>
+
+    <mvc:annotation-driven>
+        <!--可以不定义，而使用缺省的.MappingJackson2HttpMessageConverter；一旦自定义了message-converter，原来所有缺省的就失效了-->
+        <mvc:message-converters>
+            <!--处理中文乱码-->
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>text/html; charset=UTF-8</value>
+                    </list>
+                </property>
+                <!--等效替代-->
+                <!--<constructor-arg index="0" value="UTF-8"></constructor-arg>-->
+            </bean>
+
+            <!--配置fastJson的消息转化器 —— FastJsonHttpMessageConverter -->
+            <bean id="fastJsonHttpMessageConverter"
+                  class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>text/html;charset=UTF-8</value>
+                        <value>application/json;charset=UTF-8</value>
+                    </list>
+                </property>
+                <property name="fastJsonConfig">
+                    <bean class="com.alibaba.fastjson.support.config.FastJsonConfig">
+                        <property name="features">
+                            <list>
+                                <value>AllowArbitraryCommas</value>
+                                <value>AllowUnQuotedFieldNames</value>
+                                <value>DisableCircularReferenceDetect</value>
+                            </list>
+                        </property>
+                        <property name="dateFormat" value="yyyy-MM-dd"></property>
+                    </bean>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+    <!-- 1配置数据源 -->
+    <bean id="dataSource" class=
+            "org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <!--数据库驱动 -->
+        <property name="driverClassName" value="org.h2.Driver"/>
+        <!-- <property name="url">
+            <value><![CDATA[jdbc:mysql://127.0.0.1:3306/db?
+                    useUnicode=true&characterEncoding=utf-8]]></value>
+        </property> -->
+        <property name="url" value="jdbc:h2:tcp://localhost:9092//Volumes/CQ_MACDATA/javaWebProjects/demospring/demospringmvc/src/main/resources/demodb"/>
+        <property name="username" value="sa"/>
+        <property name="password" value="sa"/>
+    </bean>
+    <!-- 2配置JDBC模板 -->
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <!-- 默认必须使用数据源 -->
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+
+<!--    <bean id="userDao" class="com.example.demospringmvc.dao.UserDao" depends-on="dataSource">-->
+<!--        <property name="dataSource" ref="dataSource"></property>-->
+<!--    </bean>-->
+<!--    &lt;!&ndash;定义id为accountDao的Bean&ndash;&gt;-->
+<!--    <bean id="accountDao" class="IAccountDaoImpll">-->
+<!--        &lt;!&ndash; 将jdbcTemplate注入到accountDao实例中 &ndash;&gt;-->
+<!--        <property name="jdbcTemplate" ref="jdbcTemplate" />-->
+<!--    </bean>-->
+
+<!--        把Dao配置到Spring中-->
+        <bean id="accountDao" class="com.example.demospringmvc.dao.AccountDao">
+           <property name="jdbcTemplate" ref="jdbcTemplate"></property>
+        </bean>
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+</beans>

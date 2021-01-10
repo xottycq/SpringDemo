@@ -7,6 +7,7 @@ group 'com.example'
 version '1.0-SNAPSHOT'
 
 repositories {
+  mavenLocal()
   mavenCentral()
 }
 
@@ -44,7 +45,12 @@ dependencies {
     exclude group:"com.fasterxml.jackson.core",module:"jackson-core"
     exclude group:"com.fasterxml.jackson.core",module:"jackson-annotations"
   }
+  testImplementation 'org.springframework:spring-test:'+springVersion
+  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+  testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+  testImplementation 'org.junit.jupiter:junit-jupiter-params:5.7.0'
 }
 
 test {
-    useJUnitPlatform()    }
+    useJUnitPlatform()
+}
