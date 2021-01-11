@@ -45,6 +45,8 @@ dependencies {
     exclude group:"com.fasterxml.jackson.core",module:"jackson-core"
     exclude group:"com.fasterxml.jackson.core",module:"jackson-annotations"
   }
+  implementation 'aopalliance:aopalliance:1.0'
+  implementation 'org.aspectj:aspectjweaver:1.9.6'
   testImplementation 'org.springframework:spring-test:'+springVersion
   testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
   testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.7.0'

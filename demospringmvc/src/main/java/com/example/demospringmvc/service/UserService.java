@@ -4,7 +4,7 @@ import java.util.List;
 import com.example.demospringmvc.pojo.User;
 
 public interface UserService {
-    public List<User> findUsersWithConditions(User user);
+    public List<User> findAllUser();
     
     public int add(User user);
 }

@@ -1,6 +1,9 @@
 package com.example.demospringmvc.service;
 
+import com.example.demospringmvc.pojo.Account;
 import com.example.demospringmvc.pojo.User;
+
+import java.util.List;
 
 public interface AccountService {
     //开户销户
@@ -12,4 +15,5 @@ public interface AccountService {
     // 转账
     public void transfer(User outUser,User inUser,float money);
     public void transferWithTransaction(User outUser,User inUser,float money);
+    public List<Account> queryAllAccounts();
 }

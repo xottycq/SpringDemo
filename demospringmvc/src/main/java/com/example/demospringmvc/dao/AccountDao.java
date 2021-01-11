@@ -79,6 +79,7 @@ public class AccountDao implements IAccountDao {
 
 	// 查询所有账户信息
 	public List<Account> findAllAccount() {
+		System.out.println("JDBC Template");
 	    // 定义SQL语句
 	    String sql = "select * from tb_account,tb_user where TB_USER.ID=TB_ACCOUNT.USERID";
 	    // 创建一个新的BeanPropertyRowMapper对象

@@ -4,6 +4,8 @@ import com.example.demospringmvc.dao.AccountDao;
 import com.example.demospringmvc.dao.IAccountDao;
 import com.example.demospringmvc.pojo.Account;
 import com.example.demospringmvc.pojo.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -13,10 +15,10 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @Service("accountService")
-@Transactional
 public class AccountServiceImpl implements AccountService {
 
-    @Resource
+    @Autowired
+    @Qualifier("accountDao2")
     private IAccountDao accountDao;
 
     //开户销户
@@ -68,5 +70,10 @@ public class AccountServiceImpl implements AccountService {
         // 模拟系统运行时的突发性问题
         int i = 1/0;
         saveMoney(inUser,money);
+    }
+
+    public List<Account> queryAllAccounts(){
+        List<Account> accounts= accountDao.findAllAccount();
+        return accounts;
     }
 }

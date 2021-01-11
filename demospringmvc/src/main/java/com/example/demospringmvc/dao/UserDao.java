@@ -16,7 +16,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 
-@SuppressWarnings("unused")
 @Repository
 public class UserDao extends JdbcDaoSupport implements IUserDao {
 
@@ -25,6 +24,7 @@ public class UserDao extends JdbcDaoSupport implements IUserDao {
         super.setJdbcTemplate(jb);
     }
     public List<User> queryAllUser() {
+        System.out.println("JDBC Template------");
         String sql="select * from tb_user";
         List<Map<String,Object>> list=getJdbcTemplate().queryForList(sql);
         List<User> userList=new ArrayList<>();
