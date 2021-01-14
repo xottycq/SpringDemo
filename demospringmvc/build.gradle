@@ -51,6 +51,9 @@ dependencies {
   testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
   testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
   testImplementation 'org.junit.jupiter:junit-jupiter-params:5.7.0'
+  implementation 'mysql:mysql-connector-java:8.0.22'
+  implementation 'javax.servlet:jstl:1.2'
+  implementation 'org.apache.taglibs:taglibs-standard-impl:1.2.5'
 }
 
 test {

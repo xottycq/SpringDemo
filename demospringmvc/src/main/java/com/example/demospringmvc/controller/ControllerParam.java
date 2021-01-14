@@ -13,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.Cookie;
@@ -47,7 +46,7 @@ public class ControllerParam  implements ApplicationContextAware {
     }
 
     //只有满足所有@RequestMapping中属性值要求的请求才被其注解的方法拦截处理
-    @RequestMapping(value="requestmap",method=RequestMethod.POST,params={"action=insert"},headers={"host=localhost:8080"},consumes = "application/json",produces = "application/json")
+    @RequestMapping(value="requestmap",method=RequestMethod.POST,params={"action=insert"},headers={"Host=localhost:8080"},consumes = "application/json",produces = "application/json")
     public String testRequestMapping(Model model) {
         System.out.println("@RequestMapping");
         model.addAttribute("message","RequestMapping");
@@ -112,20 +111,21 @@ public class ControllerParam  implements ApplicationContextAware {
 
     @RequestMapping(value = "/setcookie", method = RequestMethod.GET)
     public void setCookie(HttpServletResponse httpServletResponse)  {
-        Cookie cookie = new Cookie("username", "zhangsan");
+        Cookie cookie = new Cookie("uname", "zhangsan");
         cookie.setMaxAge(10); //设置cookie的过期时间是10s
         httpServletResponse.addCookie(cookie);
         System.out.println("cookie set successful");
     }
 
     @RequestMapping("cookie")
-    public void testCookieValue(@CookieValue("JSESSIONID") String jid, @CookieValue String username, @CookieValue int age,HttpServletResponse response) throws Exception{
-        System.out.println("@CookieValue" + "-----------" + username + "---" + age);
+    public void testCookieValue(@CookieValue("JSESSIONID") String jid, @CookieValue String uname, @CookieValue int age,HttpServletResponse response) throws Exception{
+        System.out.println("@CookieValue" + "-----------" + uname + "---" + age);
         response.setCharacterEncoding("utf-8");
         response.setContentType("text/html");
         response.getWriter().write("<h1>Spring Controller Demo</h1>");
         response.getWriter().write("<h3>Cookie</h3>");
-        response.getWriter().write("<p>username="+username+"</p>");
+        response.getWriter().write("<p>JSESSIONID="+jid+"</p>");
+        response.getWriter().write("<p>username="+uname+"</p>");
         response.getWriter().write("<p>age="+age+"</p>");
     }
 
@@ -155,25 +155,32 @@ public class ControllerParam  implements ApplicationContextAware {
 
     //数组：只能传送一维数组
     @GetMapping("array1")
-    public String testArr1(String[] names) {
+    public String testArr1(String[] names,Model model) {
         for (String name : names){
             System.out.println("Array1" + "-----------" + name);
         }
+        model.addAttribute("users",names);
+        model.addAttribute("flag","array");
         return "userlist";
     }
     @PostMapping("array2")
-    public String testArr2(@RequestParam(value = "names[]")String[] xnames) {
+    public String testArr2(@RequestParam(value = "names[]")String[] xnames,Model model) {
         for (String name : xnames){
             System.out.println("Array1" + "-----------" + name);
         }
+        model.addAttribute("users",xnames);
+        model.addAttribute("flag","array");
         return "userlist";
     }
+
     @PostMapping("array3")
     public String testArr3(HttpServletRequest request) {
         String[] names = request.getParameterValues("names[]");
         for (String name : names){
             System.out.println("Array3" + "-----------" + name);
         }
+        request.setAttribute("users",names);
+        request.setAttribute("flag","array");
         return "userlist";
     }
 
@@ -188,31 +195,33 @@ public class ControllerParam  implements ApplicationContextAware {
 
     //集合
     @GetMapping("list1")
-    public String testCollection1(UserList userlist) {
+    public String testCollection1(UserList userlist,Model model) {
         List<User> users=userlist.getUsers();
         for (User user : users) {
             System.out.println("Collection1" + "-----------" + user);
         }
+        model.addAttribute("users",userlist.getUsers());
+        model.addAttribute("flag","list");
         return "userlist";
     }
 
     @PostMapping("list2")
     @ResponseBody
-    public String testCollection2(@RequestBody List<User> users) {
+    public List<User> testCollection2(@RequestBody List<User> users) {
         for (User user : users) {
             System.out.println("Collection2" + "-----------" + user);
         }
-        return "userlist";
+        return users;
     }
 
     @PostMapping("list3")
     @ResponseBody
-    public String testCollection3(@RequestBody UserList userlist) {
+    public Object testCollection3(@RequestBody UserList userlist) {
         List<User> users=userlist.getUsers();
         for (User user : users) {
             System.out.println("Collection3" + "-----------" + user);
         }
-        return "userlist";
+        return userlist;
     }
     //---------DataBinding  ControllerToView-----------
     //用Model/ModelMap/Map作为入参，可以将数据传回视图，相关例子见前面的testModel和tesMap方法
@@ -228,7 +237,7 @@ public class ControllerParam  implements ApplicationContextAware {
     }
 
     //HashMap
-    @RequestMapping("mp")
+    @RequestMapping("map")
     public Map<String,String> testMap( @RequestParam(required = false) String name, @RequestParam("age") int age) {
         System.out.println("@Return Map " + "-----------" +name + "---" + age);
         Map<String,String> map=new HashMap<>();
@@ -313,7 +322,7 @@ public class ControllerParam  implements ApplicationContextAware {
     @RequestMapping(value="/getUser1")
     public String getUser(ModelMap model){
         User user=new User();
-        user.setName("qianba");
+        user.setName("lisi");
         user.setAge(25);
         //向ModelMap中添加一个属性,使其成为sessionAttribute
         model.addAttribute("xuser",user);
