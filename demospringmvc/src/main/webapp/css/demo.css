@@ -1,0 +1,21 @@
+.leftbox{
+    width:59%;
+}
+.rightbox{
+    width:39%;
+}
+.box{
+    width:49%;
+
+}
+.left{
+    float:left;
+}
+
+.right{
+    float:right;
+}
+
+.marginleft{
+    margin-left:40px;
+}

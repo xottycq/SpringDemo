@@ -2,74 +2,87 @@
 <%@ page import="com.example.demospringmvc.pojo.User" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="java.net.URLEncoder" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta name="description" content="Spring MVC Demo">
     <title>Spring Controller Demo</title>
+    <link rel="stylesheet" type="text/css" href="css/demo.css">
     <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"/>
-
     <script type="text/javascript">
         document.cookie = "uname=JohnDoe"
         document.cookie = "age=20"
     </script>
+    <script>
+        // 判断是否填写上传人并已选择上传文件
+        function check() {
+            var name = document.getElementById("name").value;
+            var file = document.getElementById("file").value;
+            if (name == "") {
+                alert("填写上传人");
+                return false;
+            }
+            if (file.length == 0 || file == "") {
+                alert("请选择上传文件");
+                return false;
+            }
+            return true;
+        }
+    </script>
 </head>
 <body>
-<h1>Spring Controller Demo</h1>
-<br/>
-<h3>RequestMapping属性</h3>
+
+<div  class="leftbox left">
+<h4>RequestMapping属性</h4>
 <button id="requestmap">RequestMapping</button>
 <div>
-    <h3>View To Controller传参</h3>
-
+    <h4>View To Controller传参</h4>
     <div>
-
         <a href="http://localhost:8080/springmvc/controller/paratype?name=zhangsan&age=20">1:默认数据类型</a>
     </div>
-    <div>
-
-        <a href="http://localhost:8080/springmvc/controller/requestParam1?name=张三&age=14">2.1:简单数据类型---ModelMap传值---返回String</a>
-        <a href="http://localhost:8080/springmvc/controller/requestParam2?name=李四&age=18" style="margin-left:50px">2.2:简单数据类型---HttpServletRequest传值---返回Void</a>
-        <a href="http://localhost:8080/springmvc/controller/map?name=王五&age=12" style="margin-left:50px">2.3:简单数据类型---HashMap传值---返回String</a>
+    <div >
+        <a href="http://localhost:8080/springmvc/controller/requestParam1?name=张三&age=14">2.1:简单数据类型---ModelMap传值</a>
+        <a href="http://localhost:8080/springmvc/controller/requestParam2?name=李四&age=18" class="marginleft">2.2:简单数据类型---HttpServletRequest传值</a>
+        <a href="http://localhost:8080/springmvc/controller/map?name=王五&age=12" class="marginleft">2.3:简单数据类型---HashMap传值</a>
     </div>
     <div>
         <a href="http://localhost:8080/springmvc/controller/zhangsan/10">3.1专用注解：PathVariable</a>
-        <a href="http://localhost:8080/springmvc/controller/cookie" style="margin-left:50px">3.2专用注解：CookieValue</a>
-        <a href="http://localhost:8080/springmvc/controller/header" style="margin-left:50px">3.3专用注解：RequestHeader</a>
-        <button id="head" style="margin-left:50px">Customer Header</button>
+        <a href="http://localhost:8080/springmvc/controller/cookie" class="marginleft">3.2专用注解：CookieValue</a>
+        <a href="http://localhost:8080/springmvc/controller/header" class="marginleft">3.3专用注解：RequestHeader</a>
+        <button id="head" class="marginleft">Customer Header</button>
     </div>
     <div>
         <a href="http://localhost:8080/springmvc/controller/pojo1?name=赵六&age=24">4.1：POJO对象</a>
         <a href="http://localhost:8080/springmvc/controller/pojo2?user.name=王五&user.age=30&password=123456"
-           style="margin-left:50px">4.2：POJO嵌套</a>
+           class="marginleft">4.2：POJO嵌套</a>
     </div>
     <div>
         <a href="http://localhost:8080/springmvc/controller/array1?names=zs&names=ls&names=ww">5.1: 数组--url同名参数</a>
-        <button id="arr2" style="margin-left:50px">5.2: 数组--post @requestParam接收</button>
-        <button id="arr3" style="margin-left:50px">5.3: 数组--post httpServletRequest接收</button>
-        <button id="arr4" style="margin-left:50px">5.4: 数组--post @ResponseBody接收</button>
+        <button id="arr2" class="marginleft">5.2: 数组--post @requestParam接收</button>
+        <button id="arr3" class="marginleft">5.3: 数组--post httpServletRequest接收</button>
+        <button id="arr4" class="marginleft">5.4: 数组--post @ResponseBody接收</button>
     </div>
     <div>
         <a href="http://localhost:8080/springmvc/controller/list1?users[0].name=zs&users[1].name=ls&users[2].name=ww&users[0].age=20">6.1:
             集合--url参数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
-        <button id="list2" style="margin-left:50px">6.2: 集合---@RequestBody List< User ></button>
-        <button id="list3" style="margin-left:28px">6.3: 集合---@RequestBody UserList</button>
+        <button id="list2" class="marginleft">6.2: 集合---@RequestBody List< User ></button>
+        <button id="list3" style="margin-left:24px">6.3: 集合---@RequestBody UserList</button>
     </div>
 </div>
 <div>
-    <h3> Controller To View 传参</h3>
+    <h4> Controller To View 传参</h4>
     <div>
-        <h4>一、常用</h4>
+        <h5>一、常用</h5>
         <a href="http://localhost:8080/springmvc/controller/mv">1:return ModelAndView</a>
         <a href="http://localhost:8080/springmvc/controller/map?name=王五&age=30"
-           style="margin-left:50px">2:return Map</a>
-        <a href="http://localhost:8080/springmvc/controller/hello?para=World" style="margin-left:50px">3:return
+           class="marginleft">2:return Map</a>
+        <a href="http://localhost:8080/springmvc/controller/hello?para=World" class="marginleft">3:return
             String</a>
-        <a href="http://localhost:8080/springmvc/controller/requestParam2?name=李四&age=18" style="margin-left:50px">3:return
+        <a href="http://localhost:8080/springmvc/controller/requestParam2?name=李四&age=18" class="marginleft">3:return
             Void</a>
     </div>
-
     <div>
         <h5> 二、ModelAttribute</h5>
         <a href="http://localhost:8080/springmvc/controller/hello?para=World">ModelAttribute1</a>
@@ -82,19 +95,40 @@
     <div>
         <h5> 三、SessionAttribute</h5>
         <a href="http://localhost:8080/springmvc/controller/getUser1">SessionAttribute1</a>
-        <a href="http://localhost:8080/springmvc/controller/getUser2">SessionAttribute2</a>
-        <a href="http://localhost:8080/springmvc/controller/getUser3">SessionAttribute3</a>
+        <a href="http://localhost:8080/springmvc/controller/getUser2" class="marginleft">SessionAttribute2</a>
+        <a href="http://localhost:8080/springmvc/controller/getUser3" class="marginleft">SessionAttribute3</a>
     </div>
-
     <div>
         <h5> 四、Json</h5>
         <button id="requestbody1">1.Json--RequestBody1</button>
-        <button id="requestbody2">2.Json--RequestBody2</button>
+        <button id="requestbody2" class="marginleft">2.Json--RequestBody2</button>
+    </div>
+    <h5> 五、upload/download</h5>
+    <div>
+
+        <div class="box left">
+        <form action="controller/fileUpload" method="post" enctype="multipart/form-data">
+            上传人：<input type="text" name="name"/><br/>
+            请选择文件：<input type="file" name="uploadfile" multiple="multiple"/><br/>
+            <input type="submit" value="上传"/>
+        </form>
+        </div>
+        <div class="box right">
+        <a href="${pageContext.request.contextPath }/controller/download?filename=001.jpg">
+            文件下载
+        </a>
+        <br/>
+        <a href="${pageContext.request.contextPath }/controller/downloadcn?filename=壁纸.jpg">
+            中文名称文件下载
+        </a>
+        </div>
     </div>
 </div>
-<div id="headresult">
 </div>
-
+<div class="rightbox right" >
+<h2 align="center">Spring Controller Demo Result</h2>
+<div id="headresult"/>
+</div>
 <script type="text/javascript">
     document.getElementById("head").onclick = function () {
         var xmlhttp = new XMLHttpRequest();
@@ -215,14 +249,14 @@
             data: params,
             success: function (data, status) {
                 // alert("数据:" + data + "状态: " + status);
-                var tr="";
-                $.each(data,function(index,item) {
-                //等效js替代 data.forEach(function(item){
-                    tr+='<tr>';
-                    tr += '<td>' + item.name + '</td>'+'<td>' + item.age + '</td>';
-                    tr+='</tr>';
+                var tr = "";
+                $.each(data, function (index, item) {
+                    //等效js替代 data.forEach(function(item){
+                    tr += '<tr>';
+                    tr += '<td>' + item.name + '</td>' + '<td>' + item.age + '</td>';
+                    tr += '</tr>';
                 });
-                $("#headresult").append('<table border="6">'+tr+'</table>');
+                $("#headresult").append('<table border="6">' + tr + '</table>');
             },
             dataType: 'json',
             contentType: 'application/json'

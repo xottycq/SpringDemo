@@ -54,6 +54,8 @@ dependencies {
   implementation 'mysql:mysql-connector-java:8.0.22'
   implementation 'javax.servlet:jstl:1.2'
   implementation 'org.apache.taglibs:taglibs-standard-impl:1.2.5'
+  implementation 'commons-fileupload:commons-fileupload:1.4'
+  implementation 'commons-io:commons-io:2.8.0'
 }
 
 test {
