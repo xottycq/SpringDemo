@@ -7,7 +7,6 @@ import java.util.List;
 @Controller("userlist")
 public class UserList {
     private List<User> users;
-
     public List<User> getUsers() {
         return users;
     }

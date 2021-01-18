@@ -1,8 +1,10 @@
 .leftbox{
-    width:59%;
+    width:63%;
 }
 .rightbox{
-    width:39%;
+    width:33%;
+    background:lightgray;
+    height: 800px;
 }
 .box{
     width:49%;
@@ -11,11 +13,17 @@
 .left{
     float:left;
 }
-
+.right{
+    float:right;
+}
 .right{
     float:right;
 }
 
 .marginleft{
     margin-left:40px;
+}
+
+.marginlefts{
+    margin-left:20px;
 }

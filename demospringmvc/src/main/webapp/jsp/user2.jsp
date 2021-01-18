@@ -6,10 +6,10 @@
 </head>
 <body>
 <h1>Spring Controller Demo</h1>
-<h3>ModelAttribute 返回对象</h3>
+<h3>ModelAttribute xuser</h3>
 <br/>
-<p>name1:${user.name}</p>
-<p>age1:${user.age}</p>
+<%--<p>name1:${user.name}</p>--%>
+<%--<p>age1:${user.age}</p>--%>
 <p>name2:${xuser.name}</p>
 <p>age2:${xuser.age}</p>
 </body>

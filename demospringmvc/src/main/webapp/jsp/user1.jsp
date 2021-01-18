@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1>Spring Controller Demo</h1>
-<h3>返回对象</h3>
+<h3>User---Account</h3>
 <br/>
 <p>name1:${user.name}</p>
 <p>age1:${user.age}</p>
