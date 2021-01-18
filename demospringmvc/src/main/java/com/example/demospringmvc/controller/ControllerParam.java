@@ -181,7 +181,7 @@ public class ControllerParam implements ApplicationContextAware {
         return "path";
     }
 
-    //E102
+    //E14
     @PostMapping("requestbody")
     @ResponseBody    //Responsebody表示该方法的返回结果直接写入HTTP response body中（通常是json或xml数据），而不会被解析为跳转路径
     public String testRequestBody1(@RequestBody String jsonstring) {    //@RequestBody用于读取Request请求的body中的数据
@@ -197,7 +197,7 @@ public class ControllerParam implements ApplicationContextAware {
         return "user1";
     }
 
-    //E14
+    //E13
     @PostMapping("pojo4")
     public String testPojo4(@RequestBody Map<String, String> map, ModelMap mapx) {
         System.out.println("@RRequetbody1" + "-----------" + map.get("name") + "---" + map.get("age"));
