@@ -34,7 +34,7 @@
             <param-name>contextConfigLocation</param-name>
 <!--         自定义配置文件的文件名以及目录，否则使用/WEB-INF下缺省的helloweb.servlet.xml -->
                     <param-value>classpath:applicationContext.xml</param-value>
-
+<!--            <param-value>classpath:interceptorContext.xml</param-value>-->
             <!--        <param-value>classpath:helloweb-servlet-annotation.xml</param-value>-->
 <!--            <param-value>/WEB-INF/conf/helloweb-servlet-xml.xml</param-value>-->
 <!--            <param-value>/WEB-INF/jdbcContext.xml</param-value>-->

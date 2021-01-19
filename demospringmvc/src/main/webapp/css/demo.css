@@ -20,6 +20,10 @@
     float:right;
 }
 
+.linehight{
+    line-height:50px
+}
+
 .marginleft{
     margin-left:40px;
 }

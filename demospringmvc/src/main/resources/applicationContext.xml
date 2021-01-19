@@ -130,21 +130,4 @@
         <property name="maxUploadSize" value="5242880"></property>
     </bean>
 
-    <!-- 配置拦截器 -->
-    <mvc:interceptors>
-        <!--使用bean直接定义在<mvc:interceptors>下面的拦截器将拦截所有请求-->
-        <bean class="com.example.demospringmvc.interceptor.CustomInterceptor"/>
-        <!-- 拦截器1 -->
-        <mvc:interceptor>
-            <!-- 配置拦截器作用的路径 -->
-            <mvc:mapping path="/**" />
-            <!-- 定义在<mvc:interceptor>下面的表示匹配指定路径的请求才进行拦截的 -->
-            <bean class="com.example.demospringmvc.interceptor.Interceptor1" />
-        </mvc:interceptor>
-        <!-- 拦截器2 -->
-        <mvc:interceptor>
-            <mvc:mapping path="/interceptor" />
-            <bean class="com.example.demospringmvc.interceptor.Interceptor2" />
-        </mvc:interceptor>
-    </mvc:interceptors>
 </beans>
