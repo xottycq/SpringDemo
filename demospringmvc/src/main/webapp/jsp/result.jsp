@@ -2,11 +2,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Spring Controller Demo<</title>
+    <title>Spring MVC Demo<</title>
 </head>
 <body>
-<h1>Hello Spring MVC!</h1>
-<br/>
-<p>${message}</p>
+<p>${operation}:${result}</p>
 </body>
 </html>

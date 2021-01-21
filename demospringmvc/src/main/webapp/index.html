@@ -1,33 +1,58 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Entrance - Hello World</title>
     <link rel="stylesheet" type="text/css" href="css/demo.css">
+<!--   <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"/>-->
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
 </head>
 <body>
-<h1>&emsp;Spring  MVC  Demo</h1>
+<h1>&emsp;Spring MVC Demo</h1>
 <br/>
 <!--<div>-->
 <!--    <a href="http://localhost:8080/springmvc/hello-xml">ByXML</a>-->
 <!--    <a href="http://localhost:8080/springmvc/hello-annotation">ByAnnotation</a>-->
 <!--</div>-->
-<div class="linehight">
-<div class="marginleft linehight ">
-    <a href="http://localhost:8080/springmvc/controller">1.Controller Demo</a>
+<div class="leftpart">
+    <div class="marginleft">
+        <a href="http://localhost:8080/springmvc/controller">1.Controller Demo</a>
+    </div>
+    <div class="marginleft">
+<!--        <a href="http://localhost:8080/springmvc/service">2.Service Demo</a>-->
+        <a href="javascript:void(0)" onclick="startService()">2.Service Demo </a>
+    </div>
+    <div class="marginleft">
+        <a href="http://localhost:8080/springmvc/jdbctemplate">3.Dao Demo---JDBC Template </a>
+    </div>
+    <div class="marginleft">
+        <a href="http://localhost:8080/springmvc/mybatis">4.Dao Demo---mybatis</a>
+    </div>
+    <div class="marginleft">
+        <a href="http://localhost:8080/springmvc/interceptor">5.Interceptor Demo(请启用interceptorContext.xml)</a>
+    </div>
 </div>
-<div class="marginleft linehight">
-    <a href="http://localhost:8080/springmvc/service">2.Service Demo</a>
+
+<div class="rightpart">
+    <p>Detail</p>
 </div>
-<div class="marginleft">
-    <a href="http://localhost:8080/springmvc/jdbctemplate">3.Dao Demo---JDBC Template </a>
+    <div id="main" class="middlepart">
+        <p>Sub Menu</p>
+    </div>
+<br/>
+<br/>
+<br/>
+<div id="result" class="container">
+    <p>Result</p>
 </div>
-<div class="marginleft">
-    <a href="http://localhost:8080/springmvc/mybatis">4.Dao Demo---mybatis</a>
-</div>
-<div class="marginleft">
-    <a href="http://localhost:8080/springmvc/interceptor">5.Interceptor Demo(请启用interceptorContext.xml)</a>
-</div>
-</div>
+
+    <script type="text/javascript">
+        function startService() {
+              $.get("http://localhost:8080/springmvc/service",function(data,status){
+                  $("#main").html(data)
+              });
+
+        }
+    </script>
 </body>
 </html>

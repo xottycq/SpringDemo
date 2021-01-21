@@ -13,7 +13,7 @@ public interface AccountService {
     public boolean  saveMoney(User user,float money);
     public boolean  withdrawMoney(User user,float money);
     // 转账
-    public void transfer(User outUser,User inUser,float money);
-    public void transferWithTransaction(User outUser,User inUser,float money);
+    public boolean transfer(User outUser,User inUser,float money);
+    public boolean transferWithTransaction(User outUser,User inUser,float money);
     public List<Account> queryAllAccounts();
 }

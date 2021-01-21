@@ -28,6 +28,7 @@ public class AccountDaoByMybatis implements IAccountDao {
 
 	// 添加账户
 	public int addAccount(Account account) {
+		System.out.println("mybatis");
 		return 0;
 	}
 	// 更新账户

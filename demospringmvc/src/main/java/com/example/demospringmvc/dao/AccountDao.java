@@ -30,6 +30,7 @@ public class AccountDao implements IAccountDao {
 
 	// 添加账户
 	public int addAccount(Account account) {
+		System.out.println("jdbc--dao");
 		int userid=userDao.addUser(account.getUser());
 		account.getUser().setId(userid);
 		// 定义SQL

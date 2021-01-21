@@ -16,8 +16,9 @@
 .right{
     float:right;
 }
-.right{
-    float:right;
+.middle{
+
+    /*margin: 0 400px;*/
 }
 
 .linehight{
@@ -30,4 +31,29 @@
 
 .marginlefts{
     margin-left:20px;
+}
+
+.leftpart{
+    width:30%;
+    float: left;
+}
+.middlepart{
+    width:35%;
+    margin-left: 32%;
+    margin-right:32%;
+
+}
+
+
+.rightpart{
+    width:30%;
+    float: right;
+
+}
+
+.container {
+    background:lightgray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

@@ -190,7 +190,7 @@
     };
 </script>
 <script>
-    function myasync(myurl,ctype,dtype,obj,) {
+    function myasync(myurl,ctype,dtype,obj) {
         $.ajax({
             //请求方式
             type: "POST",
