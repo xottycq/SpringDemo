@@ -16,7 +16,7 @@ import java.util.HashMap;
 
 @Controller
 
-public class ServiceController {
+public class AccountController {
 
 	@Resource
 	private AccountService accountService;
@@ -53,6 +53,7 @@ public class ServiceController {
 	@RequestMapping("save")
 	public String save(User user,float money,Model model) {
 		System.out.println("save："+user+"----"+money);
+		user.setAge(20);
 		model.addAttribute("operation","存款");
 		if(accountService.saveMoney(user,money))
 			model.addAttribute("result","成功！");
@@ -63,6 +64,7 @@ public class ServiceController {
 	@RequestMapping("withdraw")
 	public String withdraw(User user,float money,Model model) {
 		System.out.println("withdraw："+user+"----"+money);
+		user.setAge(20);
 		model.addAttribute("operation","取款");
 		if(accountService.withdrawMoney(user,money))
 			model.addAttribute("result","成功！");

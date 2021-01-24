@@ -91,6 +91,7 @@ public class AccountDao implements IAccountDao {
 	}
 	// 查询所有账户信息
 	public List<Account> findAccountByName(String name) {
+		System.out.println(name);
 		// 定义SQL语句
 		String sql = "select * from tb_account,tb_user where TB_USER.name=? AND TB_USER.ID=TB_ACCOUNT.USERID";
 		// 创建一个新的BeanPropertyRowMapper对象
@@ -137,6 +138,7 @@ public class AccountDao implements IAccountDao {
 			account.setId(rs.getInt("tb_account.id"));
 			account.setBalance(rs.getFloat("balance"));
 			account.setUser(user);
+			System.out.println(account);
 			return account;
 		}
 

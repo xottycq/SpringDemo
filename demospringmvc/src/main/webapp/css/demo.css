@@ -24,7 +24,12 @@
 .linehight{
     line-height:50px
 }
-
+.marginlefta{
+    margin-left:150px;
+}
+.marginleftb{
+    margin-left:115px;
+}
 .marginleft{
     margin-left:40px;
 }

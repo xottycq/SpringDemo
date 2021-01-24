@@ -40,11 +40,11 @@ public class AccountServiceImpl implements AccountService {
     }
     // 存取钱
     public boolean  saveMoney(User user,float money){
-        if(user.getName()=="" ||user.getAge()<18 || money<=0) return false;
+        if(user.getName()=="" ||user.getAge()<18 || money<0) return false;
         List<Account> accounts= accountDao.findAccountByName(user.getName());
         if (accounts.size()==0) return false;
         int acctID=accounts.get(0).getId();
-        accountDao.updateBalance(acctID, money,true);
+        if(accountDao.updateBalance(acctID, money,true)==0) return false;
         return true;
     }
 
