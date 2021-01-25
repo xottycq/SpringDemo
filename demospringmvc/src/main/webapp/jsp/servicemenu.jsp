@@ -27,6 +27,7 @@
 <script>
         function f(bid) {
             let contenttype="application/x-www-form-urlencoded;charset=UTF-8"
+            $("#result, window.parent.document").html("Result")
             switch (bid) {
                 case "b1":
                     ajaxrequest("GET", "http://localhost:8080/springmvc/openaccount", contenttype, "text", {
@@ -97,6 +98,7 @@
         }
         function m(bid) {
             let contenttype = "application/x-www-form-urlencoded;charset=UTF-8"
+            $("#result, window.parent.document").html("Result")
             switch (bid) {
                 case "b11":
                     $("#detail, window.parent.document").load("jsp/opaccount1.jsp",{"mytitle":"开户"})

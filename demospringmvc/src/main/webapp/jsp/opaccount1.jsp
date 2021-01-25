@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/1.9.1/jquery.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery.form/4.3.0/jquery.form.js"></script>
 </head>
 <body>
@@ -44,31 +44,15 @@
 </form>
 <script>
 $(function () {
-    // $('form').ajaxForm({
-    //     success: function(responseText){
-    //         alert(responseText);
-    //     }
-    // });
-    // alert("haha")
-    // $("#myform").ajaxForm().summit(function (data, status) {
-    //     alert("提交成功" + data);
-    //     return false;
-    // });
-
-        // inside event callbacks 'this' is the DOM element so we first
-        // wrap it in a jQuery object and then invoke ajaxSubmit
-        // alert("haha")
-    $("#myform").submit(function () {
-        $("#myform").ajaxSubmit(function (data, status)
-        {
-            alert("提交成功" + data);
-           $("#result, window.parent.parent.document").html(data)
-
+    $('#myform').on('submit', function(e) {
+        e.preventDefault();   // prevent native submit
+        $(this).ajaxSubmit({
+            clearForm:true,
+            success:function(data){
+                $("#result, window.parent.parent.document").html(data)
+            },
         })
-        return false;
     });
-        // !!! Important !!!
-        // always return false to prevent standard browser submit and page navigation
 });
 </script>
 </body>

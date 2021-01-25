@@ -75,6 +75,7 @@ public class AccountController {
 
 	@PostMapping("transfer1")
 	public String transfer1(@RequestBody HashMap<String, Object> map, Model model) {
+		System.out.println("transfer1"+map);
 		model.addAttribute("operation","转账1");
 		User  outuser=JSON.toJavaObject((JSONObject)map.get("outuser"),User.class);
 		User inuser= JSON.toJavaObject((JSONObject)map.get("inuser"),User.class);

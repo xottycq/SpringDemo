@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-        <script src="https://cdn.bootcdn.net/ajax/libs/jquery/1.9.1/jquery.js"></script>
-        <script src="https://cdn.bootcdn.net/ajax/libs/jquery.form/4.3.0/jquery.form.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/1.9.1/jquery.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery.form/4.3.0/jquery.form.js"></script>
 </head>
 <body>
 <%--JSP实现--%>
@@ -54,19 +54,15 @@ $(function () {
     //     }
     // })
 
-    $('#mysummit').click(function(e){
-        e.preventDefault();
-        alert("hahahahaa"+ $("#name").val())
-    })
-    // $('#myform').on('submit', function(e) {
-    //     e.preventDefault(); // prevent native submit
-    //     $(this).ajaxSubmit({
-    //         data: {"name":'ls', "money":20},
-    //         success:function(data){
-    //             $("#result, window.parent.parent.document").html(data)
-    //        },
-    //     })
-    // });
+    $('#myform').on('submit', function(e) {
+        e.preventDefault(); // prevent native submit
+        $(this).ajaxSubmit({
+            clearForm:true,
+            success:function(data){
+                $("#result, window.parent.parent.document").html(data)
+           },
+        })
+    });
 });
 </script>
 </body>

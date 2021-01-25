@@ -15,11 +15,11 @@
 <p ><%=title%></p>
 <%if(title.equals("转账1")){%>
 <script>
-    document.myform.action="http://localhost:8080/springmvc/transfer1";
+    var myurl="http://localhost:8080/springmvc/transfer1";
 </script>
 <%}else{%>
 <script>
-    document.myform.action="http://localhost:8080/springmvc/transfer2";
+    myurl="http://localhost:8080/springmvc/transfer2";
 </script>
 <%}%>
 
@@ -57,23 +57,52 @@
 </script>
 <form id="myform" name="myform"  action="" method="post">
     转出用户姓名: <input id="outname" type="text" name="outname" ><br>
-    转入用户姓名:<input id="inname" type="text" name="inname" ><br>
+    转入用户姓名: <input id="inname" type="text" name="inname" ><br>
     金额:&ensp;&nbsp; <input id="money" type="number" name="money"><br>
-    <input type="submit" value="提交">
+    <input id="mysummit" type="submit" value="提交">
 </form>
 <script>
 $(function () {
-    $('#myform').on('submit', function(e) {
-        e.preventDefault(); // prevent native submit
-        $(this).ajaxSubmit({
-            method:"POST",
-            data: { "key1":'value1', "key2": 'value2' },
-            clearForm:true,
-            success:function(data,status){
-                $("#result, window.parent.parent.document").html(data)
+    // $('#myform').on('submit', function(e) {
+    //     e.preventDefault(); // prevent native submit
+    //     $(this).ajaxSubmit({
+    //         method:"POST",
+    //         data: { "key1":'value1', "key2": 'value2' },
+    //         clearForm:true,
+    //         success:function(data,status){
+    //             $("#result, window.parent.parent.document").html(data)
+    //         },
+    //     })
+    // });
+
+    $('#mysummit').click(function(e){
+        e.preventDefault();
+        var sdata=JSON.stringify({"outuser":{"name":$("#outname").val(),"age":40},"inuser":{"name":$("#inname").val(),"age":40},"money":parseInt($("#money").val())});
+
+        $.ajax({
+            //请求方式
+            type: "post",
+            //请求的媒体类型
+            contentType: "application/json;charset=UTF-8",
+            dataType: "text",
+            //请求地址
+            url: myurl,
+            //数据，json字符串
+            data: sdata,
+            //请求成功
+            success: function (result) {
+                // if (this.dataType == "json") result = JSON.stringify(result);
+                $("#result, window.parent.parent.document").html(result)
+                $("#myform")[0].reset()
             },
-        })
-    });
+            //请求失败，包含具体的错误信息
+            error: function (e) {
+                alert("error")
+                console.log(e.status);
+                console.log(e.responseText);
+            }
+        });
+    })
 });
 </script>
 </body>
