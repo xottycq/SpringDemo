@@ -5,6 +5,7 @@ import java.util.List;
 import com.example.demospringmvc.dao.IUserDao;
 import com.example.demospringmvc.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +17,7 @@ import javax.annotation.Resource;
 @Transactional
 public class UserServiceImpl implements UserService {
 
-    @Resource(name="UserDaoByMybatis")
+    @Resource(name="userdao_jdbctemplate")
     private IUserDao userDao;
 
     @Override

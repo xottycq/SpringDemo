@@ -20,8 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@Repository(value="UserDaoByMybatis")
-public class UserDaoByMybatis extends SqlSessionDaoSupport implements IUserDao {
+@Repository(value="userdao_mybatis")
+public class UserDaoByMybatis extends SqlSessionDaoSupport  {
 
     @Resource
     public  void setSqlSessionTemplate(SqlSessionTemplate jb) {

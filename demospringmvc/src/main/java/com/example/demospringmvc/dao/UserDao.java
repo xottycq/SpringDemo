@@ -1,14 +1,12 @@
 package com.example.demospringmvc.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.*;
 
 import com.example.demospringmvc.pojo.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -16,13 +14,15 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 
-@Repository
+@Repository(value="userdao_jdbctemplate")
 public class UserDao extends JdbcDaoSupport implements IUserDao {
 
     @Resource
     public  void setJb(JdbcTemplate jb) {
         super.setJdbcTemplate(jb);
     }
+
+
     public List<User> queryAllUser() {
         System.out.println("JDBC Template------");
         String sql="select * from tb_user";
@@ -58,9 +58,45 @@ public class UserDao extends JdbcDaoSupport implements IUserDao {
         return keyHolder1.getKey().intValue();
     }
 
-    public List<Integer> queryUserIDByName(String name){
-        String sql="select * from tb_user where name=?";
-        List<Integer> list=getJdbcTemplate().queryForList(sql,Integer.class,name);
-        return list;
+    public int updateUser(User user) {
+        // 获取到插入数据生成的ID
+        String n=user.getName();
+        int a=user.getAge();
+        String sql="update tb_user set age=? where name=?";
+        int num=getJdbcTemplate().update(new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(Connection conn) throws SQLException {
+                // 设置返回的主键字段名
+                PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                ps.setInt(1, a);
+                ps.setString(2, n);
+                return ps;
+            }
+        });
+        return num;
     }
+
+    public int deleteUser(String name) {
+        return getJdbcTemplate().update("delete from tb_user  where name=?",name);
+    }
+
+    public User  queryUser(String name){
+        return getJdbcTemplate().queryForObject("select * from tb_user where name=? limit 1",
+                new RowMapper<User>(){
+                    @Override
+                    public User mapRow(ResultSet rs, int index) throws SQLException {
+                        User user=new User();
+                        user.setName(rs.getString("name"));
+                        user.setAge(rs.getInt("age"));
+                        return user;
+                       }
+                    },
+                 name);
+    }
+
+//    public List<User> queryAllUser(){
+//        String sql="select * from tb_user";
+//        List<User> list=getJdbcTemplate().queryForList(sql,User.class);
+//        return list;
+//    }
 }

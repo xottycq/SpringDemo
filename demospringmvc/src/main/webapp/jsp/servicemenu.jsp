@@ -3,9 +3,10 @@
 <html>
 <head>
     <title>Spring MVC Demo<</title>
-    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/1.9.1/jquery.js"></script>
 </head>
 <body>
+<h3>Service Demo</h3>
 <button id="b1"  onClick="f(this.id)">1.开户</button>
 <button id="b11"  onClick="m(this.id)" class="marginlefta">1)开户</button>
 <br/>
@@ -27,7 +28,7 @@
 <script>
         function f(bid) {
             let contenttype="application/x-www-form-urlencoded;charset=UTF-8"
-            $("#result, window.parent.document").html("Result")
+            $("#result, window.parent.document").html("")
             switch (bid) {
                 case "b1":
                     ajaxrequest("GET", "http://localhost:8080/springmvc/openaccount", contenttype, "text", {
@@ -98,7 +99,7 @@
         }
         function m(bid) {
             let contenttype = "application/x-www-form-urlencoded;charset=UTF-8"
-            $("#result, window.parent.document").html("Result")
+            $("#result, window.parent.document").html("")
             switch (bid) {
                 case "b11":
                     $("#detail, window.parent.document").load("jsp/opaccount1.jsp",{"mytitle":"开户"})
