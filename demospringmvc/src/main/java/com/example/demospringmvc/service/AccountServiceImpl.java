@@ -1,6 +1,8 @@
+/**
+ * Service实现，注入所有需要用的Dao，通过调用Dao的各种方法来完成Service的所有业务逻辑
+ */
 package com.example.demospringmvc.service;
 
-import com.example.demospringmvc.dao.AccountDao;
 import com.example.demospringmvc.dao.IAccountDao;
 import com.example.demospringmvc.pojo.Account;
 import com.example.demospringmvc.pojo.User;
@@ -18,16 +20,16 @@ public class AccountServiceImpl implements AccountService {
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
-    @Qualifier("accountDao1")
+    @Qualifier("accountDao_jdbctemplate")
     private IAccountDao accountDao;
 
     //开户销户
     public boolean openAccount(User user){
-        System.out.println("三季度经济环境"+user);
+        System.out.println("openAccount===="+user);
         if(user.getName()=="" ||user.getAge()<18) return false;
         Account account=new Account();
         account.setUser(user);
-        accountDao.addAccount(account);
+       if(accountDao.addAccount(account)<=0) return false;
         return true;
     }
     
@@ -38,6 +40,7 @@ public class AccountServiceImpl implements AccountService {
             accountDao.deleteAccount(account.getId());
         return true;
     }
+
     // 存取钱
     public boolean  saveMoney(User user,float money){
         if(user.getName()=="" ||user.getAge()<18 || money<0) return false;
@@ -63,6 +66,7 @@ public class AccountServiceImpl implements AccountService {
         return withdrawMoney(outUser,money) && saveMoney(inUser,money);
     }
 
+    //带事务处理的转账
     @Transactional(propagation = Propagation.REQUIRED,
             isolation = Isolation.DEFAULT, readOnly = false)
     public boolean transferWithTransaction(User outUser, User inUser, float money) {
@@ -80,6 +84,7 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
+    //账户清单列表
     public List<Account> queryAllAccounts(){
         List<Account> accounts= accountDao.findAllAccount();
         return accounts;

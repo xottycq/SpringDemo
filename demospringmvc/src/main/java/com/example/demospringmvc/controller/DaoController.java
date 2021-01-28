@@ -1,6 +1,8 @@
+/**对Dao的功能（增删改查）进行演示，Dao功能通常应该由Service来调用，这里为演示简化成Controller直接调用
+ * 通过@Qualifier分别注入IUserDao的两个具体实现类：userdao_jdbctemplate或userdao_mybatis
+ */
 package com.example.demospringmvc.controller;
 
-import com.example.demospringmvc.dao.IAccountDao;
 import com.example.demospringmvc.dao.IUserDao;
 import com.example.demospringmvc.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,7 +86,6 @@ public class DaoController {
 
 	@RequestMapping("queryalluser")
 	public String queryalluser(Model model) {
-		System.out.println("queryalluser");
 		model.addAttribute("operation","查询用户");
 		List<User> list =userDao.queryAllUser();
 		if(list.size()>0) {
@@ -96,6 +97,5 @@ public class DaoController {
 		}
 		return "result";
 	}
-
 
 }

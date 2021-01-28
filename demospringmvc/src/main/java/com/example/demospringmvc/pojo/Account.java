@@ -1,8 +1,9 @@
+/**实体类：区别于controller、service和dao等功能类的数据类，不需要注入而交由spring管理
+ *数据类是带状态的（不同值就是不同状态），通常也不适合使用单例模式
+ *标准构成：private属性+getter/setter+toString
+ */
 package com.example.demospringmvc.pojo;
 
-import org.springframework.stereotype.Controller;
-
-//@Controller("account")
 public class Account {
     private int id;
     private User user;

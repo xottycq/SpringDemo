@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository(value="accountDao2")
+@Repository(value="accountDao_mybatis")
 public class AccountDaoByMybatis implements IAccountDao {
 	public AccountDaoByMybatis(){};
 	@Resource

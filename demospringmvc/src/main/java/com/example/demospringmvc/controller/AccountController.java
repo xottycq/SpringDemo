@@ -1,3 +1,6 @@
+/**通过银行基本业务演示了Controller对Service的调用，关键是通过@Resource注入所需的AccountSerrvice接口
+ * 将Controller从页面获取的数据经适当加工后传入到Service中，调用其完成后的返回值再通过Model传回页面
+ */
 package com.example.demospringmvc.controller;
 
 import com.alibaba.fastjson.JSON;
