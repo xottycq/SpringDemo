@@ -4,13 +4,17 @@
 package com.example.demospringmvc.controller;
 
 import com.example.demospringmvc.dao.IUserDao;
+import com.example.demospringmvc.dao.UserDaoMapper;
 import com.example.demospringmvc.pojo.User;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,8 +22,22 @@ import java.util.List;
 public class DaoController {
 	@Autowired
 	@Qualifier("userdao_jdbctemplate")
+//	@Qualifier("userdao_mybatis")
 	private IUserDao userDao;
 
+/*直接使用UserDaoMapper时须在其上增加类注解：@Repository(value="userdao_mybatis")，然后用下列配置替换上述配置：
+	@Autowired
+	@Qualifier("userdao_mybatis")
+	private UserDaoMapper userDao;
+
+	@Resource
+	private SqlSessionTemplate sqlsessionTemplate;
+
+	@PostConstruct
+	public void init(){
+		System.out.println("DaoController init");
+		userDao=sqlsessionTemplate.getMapper(UserDaoMapper.class);
+	}*/
 	@RequestMapping("jdbctemplate")
 	public String demo1(Model model) {
 		System.out.println("jdbcTemplate demo");
@@ -86,6 +104,7 @@ public class DaoController {
 
 	@RequestMapping("queryalluser")
 	public String queryalluser(Model model) {
+		System.out.println("queryAlluser");
 		model.addAttribute("operation","查询用户");
 		List<User> list =userDao.queryAllUser();
 		if(list.size()>0) {

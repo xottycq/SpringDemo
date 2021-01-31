@@ -1,114 +1,117 @@
+/**Spring与mybatis整合方法一：采用XML方式映射SQL语句
+ * 1）在Spring xml配置文件（applicationContext.xml）中配置：
+ *    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+ *         <property name="dataSource" ref="dataSource" />
+ *         <property name="configLocation" value="classpath:mybatis-config.xml" />
+ *    </bean>
+ *    <bean id="sqlsessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+ *        <constructor-arg index="0" ref="sqlSessionFactory" />
+ *    </bean>
+ *    <bean id="accountDao_mybatis" class="com.example.demospringmvc.dao.AccountDaoByMybatis">
+ *        <property name="sqlSession" ref="sqlsessionTemplate"/>
+ *   </bean>
+ * 2)在mybatis-config.xml中配置mapper和typeAlias
+ *  <typeAliases>
+ *      <package name="com.example.demospringmvc.pojo" />
+ *      <package name="com.example.demospringmvc.dto" />
+ *  </typeAliases>
+ *  <mappers>
+ *      <mapper resource="mapper/AccountMapper.xml"/>
+ *  </mappers>
+ *  3）AccountDaoByMybatis实现接口IAccountDao，注入SqlSessionTemplate
+ *     调用mapper中的方法来完成dao的相关功能，调用时：使用sqlsession的一系列SQL方法来调用mappen中的方法，在id冲突时可外加namespace名称
+ *        Object selectOne(String statement, Object parameter)
+ *        List selectList(String statement, Object parameter)
+ *        int insert(String statement, Object parameter)
+ *        int update(String statement, Object parameter)
+ *        int delete(String statement, Object parameter)
+ *
+ *   额外说明：在单独使用xml配置的mybatis mapper时，可以把mapper的namespace名称设为接口名称（必须是全限定名，如本例：com.example.demospringmvc.dao.IAccountDao），
+ *   mapper中id名称须与接口中的方法名称完全一致，二者返回类型也须一致。这时即不再需要额外的接口实现类（即本类），而把mapper.xml当成接口的实现，
+ *   从而在需要的地方直接接调用接口中的方法即可完成相应SQL功能，从而代替上述sqlsession的SQL方法调用.此时只需将applicationContext.xml中的
+ *   accountDao_mybatis配置改为：
+ *      <bean id="accountDao_mybatis" class="org.mybatis.spring.mapper.MapperFactoryBean">
+ *         <property name="mapperInterface" value="com.example.demospringmvc.dao.IAccountDao"/>
+ *         <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+ *     </bean>
+ */
 package com.example.demospringmvc.dao;
 
+import com.example.demospringmvc.dto.AccountDto;
 import com.example.demospringmvc.pojo.Account;
+import org.apache.ibatis.annotations.Param;
 import org.mybatis.spring.SqlSessionTemplate;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Repository;
 
-import javax.annotation.Resource;
-import java.util.ArrayList;
+import javax.annotation.PostConstruct;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-@Repository(value="accountDao_mybatis")
 public class AccountDaoByMybatis implements IAccountDao {
-	public AccountDaoByMybatis(){};
-	@Resource
-	private SqlSessionTemplate sqlSession;
-	public SqlSessionTemplate getSqlSession() {
-		return sqlSession;
+
+	private UserDaoMapper mapper;
+
+	private SqlSessionTemplate sqlSessionTemplate;
+	public void setSqlSessionTemplate(SqlSessionTemplate sqlSessionTemplate) {
+		this.sqlSessionTemplate = sqlSessionTemplate;
+		System.out.println("SqlSessionTemplate");
 	}
-	public void setSqlSession(SqlSessionTemplate sqlSession) {
-		this.sqlSession = sqlSession;
+
+	@PostConstruct
+	public void testInit(){
+		System.out.println("AccountDaoByMybatis init");
+		this.sqlSessionTemplate.getConfiguration().addMapper(UserDaoMapper.class);
 	}
-//	public  AccountDaoByMybatis(SqlSessionTemplate sqlSession){
-//		System.out.println("Inside  AccountDaoByMybatis constructor." );
-//		this.sqlSession = sqlSession;
-//	};
 
 	// 添加账户
 	public int addAccount(Account account) {
-		System.out.println("mybatis");
-		return 0;
+		System.out.println("Mybatis-----addAccount");
+		mapper =  sqlSessionTemplate.getMapper(UserDaoMapper.class);
+		mapper.addUser(account.getUser());
+		AccountDto accountDto=new AccountDto();
+		accountDto.setUserid(account.getUser().getId());
+		accountDto.setBalance(0);
+		System.out.println("id-----"+account.getUser().getId());
+		return sqlSessionTemplate.update("AccountMapper.insertAccount",accountDto);
 	}
+
 	// 更新账户
 	public int updateAccount(Account account) {
-		// 定义SQL
-		String sql = "update tb_account set userid=?,balance=? where id = ?";
-		// 定义数组来存放SQL语句中的参数
-		Object[] params = new Object[] { 
-                               account.getUser().getId(),
-                               account.getBalance(), 
-                               account.getId() 
-          };
-		// 执行添加操作，返回的是受SQL语句影响的记录条数
-//		int num = this.jdbcTemplate.update(sql, params);
-		return 0;
+		System.out.println("Mybatis-----updateAccount");
+		return sqlSessionTemplate.update("AccountMapper.updateAccount",account);
 	}
+
 	// 删除账户
 	public int deleteAccount(int id) {
-		// 定义SQL
-		String sql = "delete  from tb_account where id = ? ";
-		// 执行添加操作，返回的是受SQL语句影响的记录条数
-//		int num = this.jdbcTemplate.update(sql, id);
-		return 0;
-	}
-	
-	// 通过id查询账户数据信息
-	public Account findAccountById(int id) {
-	    //定义SQL语句
-	    String sql = "select * from tb_account,tb_user where TB_ACCOUNT.id = ? and TB_USER.ID=TB_ACCOUNT.USERID";
-	    // 创建一个新的BeanPropertyRowMapper对象
-//	    RowMapper<Account> rowMapper =
-//	new BeanPropertyRowMapper<Account>(Account.class);
-	    // 将id绑定到SQL语句中，并通过RowMapper返回一个Object类型的单行记录
-//	    return this.jdbcTemplate.queryForObject(sql, new AccountRowMapper(), id);
-		return new Account();
+		System.out.println("Mybatis-----deleteAccount");
+		return sqlSessionTemplate.update("AccountMapper.deleteAccount",id);
+
 	}
 
 	// 查询所有账户信息
 	public List<Account> findAllAccount() {
-		System.out.println("Mybatis-----"+sqlSession);
-		return sqlSession.selectList(
-				"findAllAccount");
-		/*等效替代：
-		IAccountDao mapper = sqlSession.getMapper(IAccountDao.class);
-		return mapper.findAllAccount();*/
+		System.out.println("Mybatis-----findAllAccount");
+		return sqlSessionTemplate.selectList("findAllAccount");
 	}
 
 	// 查询所有账户信息
 	public List<Account> findAccountByName(String name) {
-		// 定义SQL语句
-		String sql = "select * from tb_account,tb_user where TB_USER.name=? AND TB_USER.ID=TB_ACCOUNT.USERID";
-		// 创建一个新的BeanPropertyRowMapper对象
-//	    RowMapper<Account> rowMapper =
-//	new BeanPropertyRowMapper<Account>(Account.class);
-		// 执行静态的SQL查询，并通过RowMapper返回结果
-//		return this.jdbcTemplate.query(sql, new AccountRowMapper(),name);
-		return new ArrayList<Account>();
+		System.out.println("Mybatis-----findAccountByName----"+name);
+		return sqlSessionTemplate.selectList("AccountMapper.findAccountByName",name);
 	}
 
 	// 更新余额
-	public int updateBalance(int id,float money,boolean add){
-		int num=0;
-//		if (add)
-//		num=this.jdbcTemplate.update("update tb_account set balance = balance +? "
-//				+ "where id = ?",money, id);
-//		else
-//			num=this.jdbcTemplate.update("update tb_account set balance = balance -? "
-//					+ "where id = ?",money, id);
+	public int updateBalance(@Param("id")int id, @Param("money")float money, boolean add){
+		System.out.println("Mybatis-----updateBalance");
+		Map<String, Object> param=new HashMap<>();
+		param.put("balance", money);
+		param.put("id", id);
+		if (add)
+			param.put("balance", money);
+		else
+	  		param.put("balance", money*(-1));
 
-		return num;
+		return this.sqlSessionTemplate.update("updateBalance",param);
 	}
-
-	public int getAccountIdByUserId(int userId){
-		String sql = "select id from tb_account where userId = ?";
-		RowMapper<Account> rowMapper =
-				new BeanPropertyRowMapper<Account>(Account.class);
-//		Account account=this.jdbcTemplate.queryForObject(sql, rowMapper, userId);
-//		return account.getId();
-		return 0;
-	}
-
 
 }

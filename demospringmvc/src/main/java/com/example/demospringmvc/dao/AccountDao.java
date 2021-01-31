@@ -59,6 +59,7 @@ public class AccountDao implements IAccountDao {
 		int num = this.jdbcTemplate.update(sql, obj);
 		return num;
 	}
+
 	// 更新账户
 	public int updateAccount(Account account) {
 		// 定义SQL
@@ -73,25 +74,29 @@ public class AccountDao implements IAccountDao {
 		int num = this.jdbcTemplate.update(sql, params);
 		return num;
 	}
+
 	// 删除账户
 	public int deleteAccount(int id) {
+		int num;
 		// 定义SQL
-		String sql = "delete  from tb_account where id = ? ";
+		String sql1 = "delete from tb_user where id in (select userid from  tb_account where id = ?)";
+		this.jdbcTemplate.update(sql1, id);
+		String sql2 = "delete  from tb_account where id = ? ";
 		// 执行添加操作，返回的是受SQL语句影响的记录条数
-		int num = this.jdbcTemplate.update(sql, id);
+		 num= this.jdbcTemplate.update(sql2, id);
 		return num;
 	}
 	
 	// 通过id查询账户数据信息
-	public Account findAccountById(int id) {
-	    //定义SQL语句
-	    String sql = "select * from tb_account,tb_user where TB_ACCOUNT.id = ? and TB_USER.ID=TB_ACCOUNT.USERID";
-	    // 创建一个新的BeanPropertyRowMapper对象
-//	    RowMapper<Account> rowMapper =
-//	new BeanPropertyRowMapper<Account>(Account.class);
-	    // 将id绑定到SQL语句中，并通过RowMapper返回一个Object类型的单行记录
-	    return this.jdbcTemplate.queryForObject(sql, new AccountRowMapper(), id);
-	}
+//	public Account findAccountById(int id) {
+//	    //定义SQL语句
+//	    String sql = "select * from tb_account,tb_user where TB_ACCOUNT.id = ? and TB_USER.ID=TB_ACCOUNT.USERID";
+//	    // 创建一个新的BeanPropertyRowMapper对象
+////	    RowMapper<Account> rowMapper =
+////	new BeanPropertyRowMapper<Account>(Account.class);
+//	    // 将id绑定到SQL语句中，并通过RowMapper返回一个Object类型的单行记录
+//	    return this.jdbcTemplate.queryForObject(sql, new AccountRowMapper(), id);
+//	}
 
 	// 查询所有账户信息
 	public List<Account> findAllAccount() {
@@ -129,13 +134,13 @@ public class AccountDao implements IAccountDao {
 		return num;
 	}
 
-	public int getAccountIdByUserId(int userId){
-		String sql = "select id from tb_account where userId = ?";
-		RowMapper<Account> rowMapper =
-				new BeanPropertyRowMapper<>(Account.class);
-		Account account=this.jdbcTemplate.queryForObject(sql, rowMapper, userId);
-		return account.getId();
-	}
+//	public int getAccountIdByUserId(int userId){
+//		String sql = "select id from tb_account where userId = ?";
+//		RowMapper<Account> rowMapper =
+//				new BeanPropertyRowMapper<>(Account.class);
+//		Account account=this.jdbcTemplate.queryForObject(sql, rowMapper, userId);
+//		return account.getId();
+//	}
 
 	private class AccountRowMapper implements RowMapper<Account> {
 		private ResultSet rs;

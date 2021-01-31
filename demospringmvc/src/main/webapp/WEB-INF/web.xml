@@ -3,9 +3,17 @@
          xmlns="http://java.sun.com/xml/ns/j2ee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
-   http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+         http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
     <display-name>Spring MVC Application</display-name>
+
+
+    <!--此时的加载路径改为/WEB-INF/classes/applicationContext.xml，原文件放在src或resource目录下 -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:applicationContext.xml</param-value>
+    </context-param>
+
 
     <!-- 避免Spring拦截静态文件-->
     <servlet-mapping>
@@ -25,26 +33,55 @@
         <url-pattern>*.css</url-pattern>
     </servlet-mapping>
 
+    <!--创建Servlet WebApplicationContext，默认加载路径是/WEB-INF/"servlet名字-servlet.xml(springmvcdemo-servlet.xml)"-->
     <servlet>
-        <servlet-name>helloweb</servlet-name>
+        <servlet-name>springmvcdemo</servlet-name>
         <servlet-class>
             org.springframework.web.servlet.DispatcherServlet
         </servlet-class>
+
+        <!--自定义配置文件名称和位置，改为：/WEB-INF/classes/spring-servlet.xml-->
         <init-param>
             <param-name>contextConfigLocation</param-name>
-<!--         自定义配置文件的文件名以及目录，否则使用/WEB-INF下缺省的helloweb.servlet.xml -->
-                    <param-value>classpath:applicationContext.xml</param-value>
-<!--            <param-value>classpath:interceptorContext.xml</param-value>-->
-            <!--        <param-value>classpath:helloweb-servlet-annotation.xml</param-value>-->
-<!--            <param-value>/WEB-INF/conf/helloweb-servlet-xml.xml</param-value>-->
-<!--            <param-value>/WEB-INF/jdbcContext.xml</param-value>-->
+              <param-value>classpath:spring-servlet.xml</param-value>
+<!-- 演示拦截器时使用：<param-value>classpath:interceptorContext.xml</param-value>-->
         </init-param>
         <load-on-startup>0</load-on-startup>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>helloweb</servlet-name>
+        <servlet-name>springmvcdemo</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 
+    <!-- 配置请求过滤器，编码格式设为UTF-8，避免中文乱码 -->
+    <filter>
+        <filter-name>charsetfilter</filter-name>
+        <filter-class>
+            org.springframework.web.filter.CharacterEncodingFilter
+        </filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>charsetfilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
+    <!--创建Root WebApplicationContext，默认加载路径是/WEB-INF/applicationContext.xml-->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <!-- 此监听器主要用于解决java.beans.Introspector导致的内存泄漏的问题 -->
+    <listener>
+        <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+    </listener>
 </web-app>

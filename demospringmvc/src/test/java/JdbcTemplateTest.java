@@ -1,5 +1,4 @@
 import com.example.demospringmvc.dao.IUserDao;
-import com.example.demospringmvc.service.AccountService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -11,7 +10,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.example.demospringmvc.pojo.User;
 import com.example.demospringmvc.pojo.Account;
 import com.example.demospringmvc.dao.IAccountDao;
-import com.example.demospringmvc.service.UserServiceImpl;
 import org.springframework.test.context.ContextConfiguration;
 
 import javax.annotation.Resource;

@@ -1,134 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+对J2EE三层架构中的service和dao层进行配置
+-->
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:util="http://www.springframework.org/schema/util"
-       xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
    http://www.springframework.org/schema/context
    http://www.springframework.org/schema/context/spring-context-4.0.xsd
-   http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd
-    http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
-<!--    <mvc:annotation-driven/>-->
-    <context:component-scan base-package="com.example.demospringmvc"/>
+   http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+    <!--1.配置自动扫描注解:排除controller-->
+    <context:component-scan base-package="com.example.demospringmvc">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+    </context:component-scan>
 
-    <mvc:annotation-driven>
-        <!--可以不定义，而使用缺省的.MappingJackson2HttpMessageConverter；一旦自定义了message-converter，原来所有缺省的就失效了-->
-        <mvc:message-converters>
-            <!--处理中文乱码-->
-            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
-                <property name="supportedMediaTypes">
-                    <list>
-                        <value>text/html; charset=UTF-8</value>
-                    </list>
-                </property>
-                <!--等效替代-->
-                <!--<constructor-arg index="0" value="UTF-8"></constructor-arg>-->
-            </bean>
+    <!-- 2.导入外部的properties配置文件 -->
+    <context:property-placeholder location="classpath:jdbcH2.properties" />
 
-            <!--配置fastJson的消息转化器 —— FastJsonHttpMessageConverter -->
-            <bean id="fastJsonHttpMessageConverter"
-                  class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
-                <property name="supportedMediaTypes">
-                    <list>
-                        <value>text/html;charset=UTF-8</value>
-                        <value>application/json;charset=UTF-8</value>
-                    </list>
-                </property>
-                <property name="fastJsonConfig">
-                    <bean class="com.alibaba.fastjson.support.config.FastJsonConfig">
-                        <property name="features">
-                            <list>
-                                <value>AllowArbitraryCommas</value>
-                                <value>AllowUnQuotedFieldNames</value>
-                                <value>DisableCircularReferenceDetect</value>
-                            </list>
-                        </property>
-                        <property name="dateFormat" value="yyyy-MM-dd"></property>
-                    </bean>
-                </property>
-            </bean>
-        </mvc:message-converters>
-    </mvc:annotation-driven>
-    <!-- 1配置数据源 -->
+    <!--3.配置数据源(数据库连接池) -->
     <bean id="dataSource" class=
             "org.springframework.jdbc.datasource.DriverManagerDataSource">
         <!--数据库驱动 -->
-        <property name="driverClassName" value="org.h2.Driver"/>
-        <!-- <property name="url">
-            <value><![CDATA[jdbc:mysql://127.0.0.1:3306/db?
-                    useUnicode=true&characterEncoding=utf-8]]></value>
-        </property> -->
-        <property name="url" value="jdbc:h2:tcp://localhost:9092//Volumes/CQ_MACDATA/javaWebProjects/demospring/demospringmvc/src/main/resources/demodb"/>
-        <property name="username" value="sa"/>
-        <property name="password" value="sa"/>
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
     </bean>
+    <!-- 4.1.事务管理器，依赖于数据源 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    <!-- 4.2.注册事务管理器驱动 -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
 
-    <!-- 2配置JDBC模板 -->
+    <!-- 5.1-1配置JDBC模板 -->
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
         <!-- 默认必须使用数据源 -->
         <property name="dataSource" ref="dataSource" />
     </bean>
-
-
-<!--    <bean id="userDao" class="com.example.demospringmvc.dao.UserDao" depends-on="dataSource">-->
-<!--        <property name="dataSource" ref="dataSource"></property>-->
-<!--    </bean>-->
-<!--    &lt;!&ndash;定义id为accountDao的Bean&ndash;&gt;-->
-<!--    <bean id="accountDao" class="IAccountDaoImpll">-->
-<!--        &lt;!&ndash; 将jdbcTemplate注入到accountDao实例中 &ndash;&gt;-->
-<!--        <property name="jdbcTemplate" ref="jdbcTemplate" />-->
-<!--    </bean>-->
-
-<!--        把Dao配置到Spring中-->
-        <bean id="accountDao_jdbctemplate" class="com.example.demospringmvc.dao.AccountDao">
-           <property name="jdbcTemplate" ref="jdbcTemplate"></property>
-        </bean>
-<!--    <bean id="accountDao2" class="com.example.demospringmvc.dao.AccountDaoByMybatis">-->
-<!--        <property name="sqlSession" ref="sqlsessionTemplate"></property>-->
-<!--    </bean>-->
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="prefix" value="/jsp/"/>
-        <property name="suffix" value=".jsp"/>
+    <!--5.1-2配置使用JDBC模板的Dao，也可以用注解来代替，见UserDao-->
+    <bean id="accountDao_jdbctemplate" class="com.example.demospringmvc.dao.AccountDao" depends-on="dataSource">
+        <property name="jdbcTemplate" ref="jdbcTemplate"/>
     </bean>
 
-    <!-- 4.事务管理器，依赖于数据源 -->
-    <bean id="transactionManager"
-          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="dataSource" />
-    </bean>
-
-    <!-- 5.注册事务管理器驱动 -->
-    <tx:annotation-driven transaction-manager="transactionManager"/>
-
-    <!-- 配置SqlSessionFactoryBean -->
+    <!--5.2-1 配置mybatis之SqlSessionFactoryBean -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <!-- 引用数据源组件 -->
         <property name="dataSource" ref="dataSource" />
-<!--        &lt;!&ndash; 引用MyBatis配置文件中的配置 &ndash;&gt;-->
-<!--        <property name="configLocation" value="classpath:mybatis-config.xml" />-->
-        <!-- 别名 -->
-        <property name="typeAliasesPackage" value="com.example.demospringmvc.pojo"></property>
-        <!-- sql映射文件路径 -->
-        <property name="mapperLocations" value="classpath:mapper/*.xml"></property>
+        <!-- 还可以引用MyBatis专属配置文件中的配置 -->
+        <property name="configLocation" value="classpath:mybatis-config.xml" />
+
+        <!-- sql映射文件路径，可代替mybatis-config中的mappers设置 -->
+        <!-- <property name="mapperLocations" value="classpath:mapper/*.xml"/>-->
     </bean>
+
+
+    <!--5.2-2 配置使用SqlSessionTemplate(可选，在使用注解时常用到到) -->
     <bean id="sqlsessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
-         <constructor-arg index="0" ref="sqlSessionFactory" />
+        <constructor-arg index="0" ref="sqlSessionFactory" />
     </bean>
-    <!-- 配置DAO -->
+
+    <!--5.2-3 配置mapper接口
+    <bean id="accountDao_mybatis" class="org.mybatis.spring.mapper.MapperFactoryBean"-
+       <property name="mapperInterface" value="com.example.demospringmvc.dao.IAccountDao"/>
+       <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+        与sqlSessionFactory二选一配置&
+       <property name="sqlSessionTemplate" ref="sqlsessionTemplate"/>
+    </bean>
+    -->
+
+    <!--5.2-3 配置Dao（xml） -->
+    <!--xml方式-->
+    <bean id="accountDao_mybatis" class="com.example.demospringmvc.dao.AccountDaoByMybatis">
+        <property name="sqlSessionTemplate" ref="sqlsessionTemplate"/>
+    </bean>
+    <!--5.2-3 配置Dao（注解扫描）-->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.example.demospringmvc.dao"></property>
+        <property name="basePackage" value="com.example.demospringmvc.dao"/>
     </bean>
-
-    <!-- 配置文件上传解析器 MultipartResolver -->
-    <bean id="multipartResolver"
-          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <!-- 设置请求编码格式-->
-        <property name="defaultEncoding" value="UTF-8" />
-        <!-- 设定文件上传的最大值5MB，5*1024*1024 -->
-        <property name="maxUploadSize" value="5242880"></property>
-    </bean>
-
 </beans>

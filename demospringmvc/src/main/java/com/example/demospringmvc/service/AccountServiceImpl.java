@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.List;
 
@@ -20,12 +21,12 @@ public class AccountServiceImpl implements AccountService {
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
-    @Qualifier("accountDao_jdbctemplate")
+    @Qualifier("accountDao_jdbctemplate")      //选择相应的SQL实现
     private IAccountDao accountDao;
 
     //开户销户
     public boolean openAccount(User user){
-        System.out.println("openAccount===="+user);
+        System.out.println("AccountServiceImpl---openAccount:"+user);
         if(user.getName()=="" ||user.getAge()<18) return false;
         Account account=new Account();
         account.setUser(user);
@@ -34,6 +35,7 @@ public class AccountServiceImpl implements AccountService {
     }
     
     public boolean  closeAccount(User user){
+        System.out.println("AccountServiceImpl---closeAccount:"+accountDao);
         if(user.getName()=="" ||user.getAge()<18) return false;
         List<Account> accounts=accountDao.findAccountByName(user.getName());
         for(Account account:accounts)
@@ -43,8 +45,10 @@ public class AccountServiceImpl implements AccountService {
 
     // 存取钱
     public boolean  saveMoney(User user,float money){
+        System.out.println("AccountServiceImpl---saveMoney");
         if(user.getName()=="" ||user.getAge()<18 || money<0) return false;
         List<Account> accounts= accountDao.findAccountByName(user.getName());
+        System.out.println(accounts.size()+"---"+user.getName());
         if (accounts.size()==0) return false;
         int acctID=accounts.get(0).getId();
         if(accountDao.updateBalance(acctID, money,true)==0) return false;
@@ -52,6 +56,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     public boolean  withdrawMoney(User user,float money){
+        System.out.println("AccountServiceImpl---withdrawMoney");
         if(user.getName()=="" ||user.getAge()<18 || money<=0) return false;
         List<Account> accounts= accountDao.findAccountByName(user.getName());
         if (accounts.size()==0 ) return false;
@@ -63,13 +68,14 @@ public class AccountServiceImpl implements AccountService {
 
     //转账
     public boolean  transfer(User outUser, User inUser, float money) {
+        System.out.println("AccountServiceImpl---transfer");
         return withdrawMoney(outUser,money) && saveMoney(inUser,money);
     }
 
     //带事务处理的转账
-    @Transactional(propagation = Propagation.REQUIRED,
-            isolation = Isolation.DEFAULT, readOnly = false)
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT,rollbackFor = Exception.class)
     public boolean transferWithTransaction(User outUser, User inUser, float money) {
+        System.out.println("AccountServiceImpl---transferWithTransaction");
         boolean rt1=false;
         boolean rt2=false;
         try{
@@ -78,6 +84,7 @@ public class AccountServiceImpl implements AccountService {
         int i = 1/0;
         rt2=saveMoney(inUser,money);}
         catch(Exception e){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             System.out.println(e.getMessage());
         }finally {
             return rt1&&rt2;

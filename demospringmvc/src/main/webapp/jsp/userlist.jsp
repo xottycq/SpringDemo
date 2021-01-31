@@ -13,7 +13,6 @@
 
 <%
     request.setAttribute("flag","list");
-    System.out.println("ulisulist");
 %>
 
 <table id="tb" border="6">

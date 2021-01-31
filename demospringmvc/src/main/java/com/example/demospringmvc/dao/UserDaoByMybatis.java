@@ -1,61 +1,82 @@
+/**Spring与mybatis整合方法二：采用注解方式映射SQL语句
+ * 1）在Spring xml配置文件（applicationContext.xml）中配置：
+ *    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+ *         <property name="dataSource" ref="dataSource" />
+ *         <property name="configLocation" value="classpath:mybatis-config.xml" />
+ *    </bean>
+ *    <bean id="sqlsessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+ *        <constructor-arg index="0" ref="sqlSessionFactory" />
+ *    </bean>
+ *        <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+ *        <property name="basePackage" value="com.example.demospringmvc.dao"/>
+ *     </bean>
+ * 2)在mybatis-config.xml中配置mapper和typeAlias
+ *  <typeAliases>
+ *      <package name="com.example.demospringmvc.pojo" />
+ *      <package name="com.example.demospringmvc.dto" />
+ *  </typeAliases>
+
+ *  3）UserDaoByMybatis实现接口IUserDao，继承SqlSessionDaoSupport
+ *    a)@Repository注解类
+ *    b)@Resourece注入SqlSessionTemplate
+ *    c)mapper =  getSqlSessionTemplate().getMapper(UserDaoMapper.class);
+ *    d)用mapper调用注解接口中的方法实现Dao的各项功能
+ *
+ *   额外说明：在单独使用注解配置的mybatis mapper时，此时mapper形式上是一个接口（其中含mybatis的SQL语句注解），实际上可以直接调用其中
+ *   的方法来完成相应的SQL功能，无需像本例一样又提供一层接口和实现的封装，即可以省略IUserDao和UserDaoByMybatis。
+ *
+ */
 package com.example.demospringmvc.dao;
 
 import com.example.demospringmvc.pojo.User;
-import org.apache.ibatis.session.SqlSession;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.core.support.JdbcDaoSupport;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Repository;
-
 import javax.annotation.Resource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Repository(value="userdao_mybatis")
-public class UserDaoByMybatis extends SqlSessionDaoSupport  {
+public class UserDaoByMybatis extends SqlSessionDaoSupport implements IUserDao, ApplicationListener<ContextRefreshedEvent> {
 
-    @Resource
-    public  void setSqlSessionTemplate(SqlSessionTemplate jb) {
-        super.setSqlSessionTemplate(jb);
+    private UserDaoMapper mapper;
+
+    //Spring初始化
+    @Override
+    public void onApplicationEvent(ContextRefreshedEvent event) {
+        //保证在web容器中只执行一次该事件
+        if (event.getApplicationContext().getParent() == null) {
+            System.out.println("UserDaoByMybatis ini");
+            mapper =  getSqlSessionTemplate().getMapper(UserDaoMapper.class);
+        }
     }
 
+    @Resource
+    public  void setSqlSessionTemplate(SqlSessionTemplate sst) {
+        super.setSqlSessionTemplate(sst);
+    }
+
+
     public List<User> queryAllUser() {
-        System.out.println("Mybatis------");
-        SqlSession sqlSession = getSqlSession();
-        IUserDao mapper = sqlSession.getMapper(IUserDao.class);
+        System.out.println("Mybatis------queryAllUser");
         return mapper.queryAllUser();
     }
 
-    public int addUser(User user) {
-//        KeyHolder keyHolder1 = new GeneratedKeyHolder();
-//        // 获取到插入数据生成的ID
-//        String n=user.getName();
-//        int a=user.getAge();
-//        String sql="insert into tb_user(name,age) values (?, ?)";
-//        getJdbcTemplate().update(new PreparedStatementCreator() {
-//            @Override
-//            public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-//                // 设置返回的主键字段名
-//                PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-//                ps.setString(1, n);
-//                ps.setInt(2, a);
-//                return ps;
-//            }
-//        }, keyHolder1);
-        return 0;
+    public int addUser(User user){
+        System.out.println("Mybatis------addUser");
+        return mapper.addUser(user);
     }
-
-    public List<Integer> queryUserIDByName(String name){
-
-        return new ArrayList<>();
+    public int updateUser(User user){
+        System.out.println("Mybatis------udateUser");
+        return mapper.updateUser(user);
+    }
+    public int deleteUser(String name){
+        System.out.println("Mybatis------deleteUser");
+        return mapper.deleteUser(name);
+    }
+    public User  queryUser(String name){
+        System.out.println("Mybatis------queryUser");
+        return mapper.queryUser(name);
     }
 }

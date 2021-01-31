@@ -1,5 +1,3 @@
-package com.example.demospringmvc.controller;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -11,7 +9,7 @@ public class HelloControllerByAnnotation {
         System.out.println("HelloControllerByAnnotation----Hello Spring MVC!");
         ModelAndView mv=new ModelAndView();
         mv.addObject("message","Hello from Annotation!");
-        mv.setViewName("hello");
+        mv.setViewName("jsp/hello.jsp");
         return mv;
     }
 }

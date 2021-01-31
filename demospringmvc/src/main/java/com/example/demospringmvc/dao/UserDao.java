@@ -99,7 +99,7 @@ public class UserDao extends JdbcDaoSupport implements IUserDao {
     }
 
     public List<User> queryAllUser(){
-        System.out.println("JDBC Template-----queryAllUser2");
+        System.out.println("JDBC Template-----queryAllUser");
         String sql="select * from tb_user";
         List<User> list=getJdbcTemplate().query(sql,new BeanPropertyRowMapper<>(User.class));
         return list;

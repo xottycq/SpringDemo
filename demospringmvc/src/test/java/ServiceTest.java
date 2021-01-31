@@ -1,7 +1,5 @@
 import com.example.demospringmvc.pojo.Account;
 import com.example.demospringmvc.pojo.User;
-import com.example.demospringmvc.service.UserService;
-import com.example.demospringmvc.service.UserServiceImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -9,7 +7,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.example.demospringmvc.service.AccountService;
 import org.junit.jupiter.api.Test;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 //测试类

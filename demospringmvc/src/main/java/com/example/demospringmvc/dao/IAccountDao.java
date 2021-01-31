@@ -15,11 +15,6 @@ public interface IAccountDao {
 	// 更新余额
 	public int updateBalance(int id,float money,boolean add);
 
-	// 通过id查询
-	public int getAccountIdByUserId(int userId);
-
-	// 通过id查询
-	public Account findAccountById(int id);
 	// 查询所有账户
 	public List<Account> findAllAccount();
 

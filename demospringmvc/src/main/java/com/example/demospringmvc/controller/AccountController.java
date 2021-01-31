@@ -33,7 +33,7 @@ public class AccountController {
 
 	@RequestMapping("openaccount")
 	public String openaccount(User user,Model model) {
-		System.out.println("openaccount："+user);
+		System.out.println("AccountController---openaccount："+user);
 		model.addAttribute("operation","开户");
 		if(accountService.openAccount(user))
 			model.addAttribute("result","成功！");
@@ -44,7 +44,7 @@ public class AccountController {
 
 	@RequestMapping("closeaccount")
 	public String closeaccount(User user,Model model) {
-		System.out.println("closeaccount："+user);
+		System.out.println("AccountController---closeaccount："+user);
 		model.addAttribute("operation","销户");
 		if(accountService.closeAccount(user))
 			model.addAttribute("result","成功！");
@@ -55,7 +55,7 @@ public class AccountController {
 
 	@RequestMapping("save")
 	public String save(User user,float money,Model model) {
-		System.out.println("save："+user+"----"+money);
+		System.out.println("AccountController---save："+user+"----"+money);
 		user.setAge(20);
 		model.addAttribute("operation","存款");
 		if(accountService.saveMoney(user,money))
@@ -66,7 +66,7 @@ public class AccountController {
 	}
 	@RequestMapping("withdraw")
 	public String withdraw(User user,float money,Model model) {
-		System.out.println("withdraw："+user+"----"+money);
+		System.out.println("AccountController---withdraw："+user+"----"+money);
 		user.setAge(20);
 		model.addAttribute("operation","取款");
 		if(accountService.withdrawMoney(user,money))
@@ -78,12 +78,11 @@ public class AccountController {
 
 	@PostMapping("transfer1")
 	public String transfer1(@RequestBody HashMap<String, Object> map, Model model) {
-		System.out.println("transfer1"+map);
+		System.out.println("AccountController---transfer1"+map);
 		model.addAttribute("operation","转账1");
 		User  outuser=JSON.toJavaObject((JSONObject)map.get("outuser"),User.class);
 		User inuser= JSON.toJavaObject((JSONObject)map.get("inuser"),User.class);
 		float money=(Integer)map.get("money");
-		System.out.println("transfer1"+"----"+outuser+"----"+inuser+"----"+money);
 		if(accountService.transfer(outuser,inuser,money))
 			model.addAttribute("result","成功！");
 		else
@@ -93,7 +92,7 @@ public class AccountController {
 
 	@RequestMapping("transfer2")
 	public String transfer2(@RequestBody TransferAccount taccount, Model model) {
-		System.out.println("transfer2"+taccount.getOutuser());
+		System.out.println("AccountController---transfer2"+taccount.getOutuser());
 		model.addAttribute("operation","转账2");
 		if(accountService.transferWithTransaction(taccount.getOutuser(),taccount.getInuser(),taccount.getMoney()))
 			model.addAttribute("result","成功！");
