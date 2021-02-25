@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--    Spring Bean有下列属性可供配置：
+        ① class
+        该配置项是必须按项，用于指定创建Bean实例的Bean类的路径。
+        ② name
+        该配置项是必须按项，用于指定Bean唯一的标识符，在基于 XML 的配置项中，可以使用 id和或 name 属性来指定 Bean唯一标识符。
+        ③ scope
+        该配置项是可选项，用于设定创建Bean对象的作用域。
+        ④ constructor-arg
+        该配置项是可选项，用于指定通过构造函数注入依赖数据到Bean。
+        ⑤ properties
+        该配置项是可选项，用于指定通过set方法注入依赖数据到Bean。
+        ⑥ autowiring mode
+        该配置项是可选项，用于指定通过自动依赖方法注入依赖数据到Bean。
+        ⑦ lazy-initialization mode
+        该配置项是可选项，用于指定IOC容器延迟创建Bean，在用户请求时创建Bean，而不要在启动时就创建Bean。
+        ⑧ initialization
+        该配置项是可选项，用于指定IOC容器完成Bean必要的创建后，调用Bean类提供的回调方法对Bean实例进一步处理。
+        ⑨ destruction
+        该配置项是可选项，用于指定IOC容器在销毁Bean时，调用Bean类提供的回调方法。-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="helloworld" class="com.example.demospringbean.ClassParentOfA" scope="prototype" >
+        <property name="message" value="Hello World" />
+    </bean>
+<!--    <bean class="com.example.demospringbean.InitHelloWorld" />-->
+    <bean name="helloChina" class="com.example.demospringbean.ClassA" init-method="init" destroy-method="destroy" parent="helloworld">
+        <property name="message2" value="Hello China"/>
+    </bean>
+
+    <!--构造器注入-->
+    <bean id="classB1" class="com.example.demospringbean.ClassB">
+        <constructor-arg ref="classC"/>
+<!--        <constructor-arg index="0" ref="classC"/>-->
+<!--        <constructor-arg type="java.lang.Object" ref="classC"/>-->
+    </bean>
+    <!--自动装配
+    <bean id="classB1" class="com.example.springbean.ClassB" autowire='constructor'/>
+    -->
+
+    <!--Setter注入-->
+    <bean id="classB2" class="com.example.demospringbean.ClassB"  >
+        <property name="classC" ref="classC"/>
+    </bean>
+    <!--自动装配
+      <bean id="classB2" class="com.example.springbean.ClassB" autowire='byName'/>
+      <bean id="classB2" class="com.example.springbean.ClassB" autowire='byType'/>
+     -->
+    <bean id="classC" class="com.example.demospringbean.ClassC">
+    </bean>
+
+
+    <!--静态工厂注入-->
+    <bean id="classB3" class="com.example.demospringbean.ClassB"  >
+        <property name="classC" ref="classCStaticFactory"/>
+    </bean>
+    <bean id="classCStaticFactory" class="com.example.demospringbean.ClassCFactory" factory-method="getClassFromStaticFactory">
+    </bean>
+
+    <!--实例工厂注入-->
+    <bean id="classB4" class="com.example.demospringbean.ClassB"  >
+        <property name="classC" ref="classFromInstanceFactory"/>
+    </bean>
+    <bean name="classCInstanceFactory" class="com.example.demospringbean.ClassCFactory"/>
+    <bean name="classFromInstanceFactory" factory-bean="classCInstanceFactory" factory-method="getClassFromFactory"/>
+
+
+    <!--嵌套bean Setter注入-->
+    <bean id="classB" class="com.example.demospringbean.ClassB">
+        <property name="classC">
+            <bean class="com.example.demospringbean.ClassC"/>
+        </property>
+    </bean>
+
+    <!-- Definition for javaCollection -->
+    <bean id="javaCollection" class="com.example.demospringbean.ClassCollection">
+        <!-- results in a setAddressList(java.util.List) call -->
+        <property name="addressList">
+            <list>
+                <value>INDIA</value>
+                <value>Pakistan</value>
+                <value>USA</value>
+                <value>USA</value>
+            </list>
+        </property>
+
+        <!-- results in a setAddressSet(java.util.Set) call -->
+        <property name="addressSet">
+            <set>
+                <value>INDIA</value>
+                <value>Pakistan</value>
+                <value>USA</value>
+                <value>USA</value>
+            </set>
+        </property>
+
+        <!-- results in a setAddressMap(java.util.Map) call -->
+        <property name="addressMap">
+            <map>
+                <entry key="1" value="INDIA"/>
+                <entry key="2" value="Pakistan"/>
+                <entry key="3" value="USA"/>
+                <entry key="4" value="USA"/>
+            </map>
+        </property>
+
+        <!-- results in a setAddressProp(java.util.Properties) call -->
+        <property name="addressProp">
+            <props>
+                <prop key="one">INDIA</prop>
+                <prop key="two">Pakistan</prop>
+                <prop key="three">USA</prop>
+                <prop key="four">USA</prop>
+            </props>
+        </property>
+
+    </bean>
+</beans>

@@ -1,6 +1,6 @@
 package com.example.demospringbean;
 import java.util.*;
-public class JavaCollection {
+public class ClassCollection {
     List addressList;
     Set  addressSet;
     Map  addressMap;

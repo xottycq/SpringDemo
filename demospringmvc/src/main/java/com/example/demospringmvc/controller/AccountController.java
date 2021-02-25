@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.demospringmvc.pojo.TransferAccount;
 import com.example.demospringmvc.pojo.User;
 import com.example.demospringmvc.service.AccountService;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +19,6 @@ import javax.annotation.Resource;
 import java.util.HashMap;
 
 @Controller
-
 public class AccountController {
 
 	@Resource

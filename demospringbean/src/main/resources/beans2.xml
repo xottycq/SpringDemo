@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--    Spring Bean有下列属性可供配置：
+        ① class
+        该配置项是必须按项，用于指定创建Bean实例的Bean类的路径。
+        ② name
+        该配置项是必须按项，用于指定Bean唯一的标识符，在基于 XML 的配置项中，可以使用 id和或 name 属性来指定 Bean唯一标识符。
+        ③ scope
+        该配置项是可选项，用于设定创建Bean对象的作用域。
+        ④ constructor-arg
+        该配置项是可选项，用于指定通过构造函数注入依赖数据到Bean。
+        ⑤ properties
+        该配置项是可选项，用于指定通过set方法注入依赖数据到Bean。
+        ⑥ autowiring mode
+        该配置项是可选项，用于指定通过自动依赖方法注入依赖数据到Bean。
+        ⑦ lazy-initialization mode
+        该配置项是可选项，用于指定IOC容器延迟创建Bean，在用户请求时创建Bean，而不要在启动时就创建Bean。
+        ⑧ initialization
+        该配置项是可选项，用于指定IOC容器完成Bean必要的创建后，调用Bean类提供的回调方法对Bean实例进一步处理。
+        ⑨ destruction
+        该配置项是可选项，用于指定IOC容器在销毁Bean时，调用Bean类提供的回调方法。-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+    <context:component-scan base-package="com.example.demospringbean"/>
+    <bean id="beanA" class="com.example.demospringbean.BeanA">
+        <property name="message" value="Inject by XML" />
+    </bean>
+</beans>

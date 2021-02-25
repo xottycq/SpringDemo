@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--1.可以配置多个servlet，每个servlet对应一个WebApplicationContext
+        <init-param>
+             <param-name>contextClass</param-name>
+              <param-value>com.myapp.secure.SecureContext</param-value>
+           </init-param>
+     2.只有一个ApplicationContext，在<context-param>中配置
+     3.Spring容器（父：service、repository） ：servletContext>contextLoaderListener->Root ApplicationContext
+       SpringMVC容器（子：controller、viewResolver、handlerMapping） ：servletContext>dispacherServlet->Servlet WebAppContext
+       当启动的时候先会初始化RootAC，第一次HTTP访问的时候会初始化ServletAC,并将RootAC注入其中
+       子容器里可以访问父容器里的对象，但是在父容器里不可以访问子容器的对象
+-->
 <web-app id="WebApp_ID" version="2.4"
          xmlns="http://java.sun.com/xml/ns/j2ee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -34,6 +45,7 @@
     </servlet-mapping>
 
     <!--创建Servlet WebApplicationContext，默认加载路径是/WEB-INF/"servlet名字-servlet.xml(springmvcdemo-servlet.xml)"-->
+    <!--DispatcherServlet本质是一个HttpServletBean继承自HttpServlet-->
     <servlet>
         <servlet-name>springmvcdemo</servlet-name>
         <servlet-class>
@@ -43,7 +55,7 @@
         <!--自定义配置文件名称和位置，改为：/WEB-INF/classes/spring-servlet.xml-->
         <init-param>
             <param-name>contextConfigLocation</param-name>
-              <param-value>classpath:spring-servlet.xml</param-value>
+            <param-value>classpath:spring-servlet.xml</param-value>
 <!-- 演示拦截器时使用：<param-value>classpath:interceptorContext.xml</param-value>-->
         </init-param>
         <load-on-startup>0</load-on-startup>

@@ -1,11 +1,11 @@
 package com.example.demospringbean;
 
-public class HelloChina {
+public class ClassA {
     private String message;
     public void setMessage(String message){
         this.message  = message;
     }
-    public void getMessage1(){
+    public void getMessage(){
         System.out.println("Child Message : " + message);
     }
 

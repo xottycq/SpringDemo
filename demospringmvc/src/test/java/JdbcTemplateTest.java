@@ -25,8 +25,7 @@ public class JdbcTemplateTest {
 	public static void init() {
 		System.out.println("初始化数据");
 		// 加载配置文件
-		applicationContext =
-				new ClassPathXmlApplicationContext("applicationContext.xml");
+		applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
 	}
 @Test
 public void test() {
@@ -117,8 +116,8 @@ public void test() {
 	    IAccountDao accountDao =
 	            (IAccountDao) applicationContext.getBean("accountDao");
 	    // 执行findAccountById()方法
-	    Account account = accountDao.findAccountById(2);
-	    System.out.println(account);
+	  //  Account account = accountDao.findAccountById(2);
+	  //  System.out.println(account);
 	}
 
 	@Test
