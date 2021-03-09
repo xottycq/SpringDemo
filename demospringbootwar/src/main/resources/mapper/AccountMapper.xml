@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+namespace必须是dao的名称
+-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demospringbootwar.mapper.AccountMapper">
+    <insert id="insertAccount" parameterType="AccountDto" >
+        insert into TB_ACCOUNT (userid,balance)
+        values (#{userid}, #{balance});
+    </insert>
+
+    <delete id="deleteAccount">
+        delete from tb_user where id in (select userid from  tb_account where id = #{id});
+        delete from TB_ACCOUNT
+        where id = #{id}
+    </delete>
+
+    <update id="updateAccount" parameterType="Account">
+        update TB_ACCOUNT
+        set userid=#{userid},
+            balance=#{balance}
+        where id = #{id}
+    </update>
+
+    <update id="updateBalance">
+        update TB_ACCOUNT
+        set balance=balance+#{balance}
+        where id = #{id}
+    </update>
+    <!-- 当数据库中的字段信息与对象的属性不一致时需要通过resultMap来映射 -->
+    <resultMap type="Account" id="accountList" autoMapping="true">
+        <association property="user" column="USERID" javaType="User" resultMap="userResult"/>
+    </resultMap>
+    <resultMap id="userResult" type="User">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="age" column="age"/>
+    </resultMap>
+
+    <!-- 查询用户列表(参数：对象入参) -->
+    <select id="findAllAccount" resultMap="accountList" parameterType="Account">
+        select a.*,u.id as uid,u.name,u.age from tb_account as a,tb_user u
+        where a.userid=u.id
+    </select>
+
+    <!-- 查询用户列表(参数：对象入参) -->
+    <select id="findAccountByName" resultMap="accountList">
+        select * from tb_account,tb_user where TB_USER.name=#{name} AND TB_USER.ID=TB_ACCOUNT.USERID
+    </select>
+</mapper>

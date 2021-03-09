@@ -1,5 +1,5 @@
 /**三种Bean加载方式
- * 1.xml文件加载
+ * 1.xml文件配置（Spring 1.x时代）
  * 1）ApplicationContext：在初始化应用上下文时就实例化所有单实例的Bean
  *   a)ClassPathXmlApplicationContext:缺省资源类型classpath
  *   b)FileSystemXmlApplicationContext:缺省资源类型file,可以用绝对路径（带盘符）或相对路径（项目目录）为根目录
@@ -15,8 +15,8 @@
  *     c.3.request.getSession().getServletContext();
  *   d)AnnotationConfigWebApplicationContext:web程序专用,注解进行配置
  * 2）BeanFactory:在初始化容器时，并未实例化Bean，直到第一次访问某个Bean时才实例化目标Bean
- * 2.注解加载：xml和注解中两种扫描方式
- * 3.java配置加载：AnnotationConfigApplicationContext
+ * 2.注解配置（Spring 2.x 时代）：xml和注解中两种扫描方式
+ * 3.java配置（Spring 3.x 时代）：AnnotationConfigApplicationContext
  */
 package com.example.demospringbean;
 

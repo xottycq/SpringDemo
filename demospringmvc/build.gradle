@@ -16,9 +16,6 @@ ext {
   springVersion ='5.3.2'
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
 dependencies {
   implementation 'org.springframework:spring-beans:'+springVersion
   implementation 'org.springframework:spring-core:'+springVersion

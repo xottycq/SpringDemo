@@ -1,0 +1,28 @@
+.wrap {
+    width: 1000px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+.leftpart{
+    width:400px;
+    height:400px;
+    background: #ccffff;
+    float: left;
+}
+
+.rightpart{
+    width:600px;
+    height: 400px;
+    background: #ffcccc;
+    float: left;
+}
+
+.container {
+    width: 1000px;
+    margin: 0 auto;
+    overflow: hidden;
+    background:lightgray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

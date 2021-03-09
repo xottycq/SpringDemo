@@ -7,7 +7,6 @@ import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 
-
 public class Person implements BeanFactoryAware, BeanNameAware,
         InitializingBean, DisposableBean {
 
@@ -61,8 +60,7 @@ public class Person implements BeanFactoryAware, BeanNameAware,
     }
 
 
-
-    // 这是InitializingBean接口方法
+    //这是InitializingBean接口方法
     @Override
     public void afterPropertiesSet() throws Exception {
         System.out

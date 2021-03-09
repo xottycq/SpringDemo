@@ -21,13 +21,7 @@ public class ServiceTest {
 				new ClassPathXmlApplicationContext("applicationContext.xml");
 	}
 
-	@Test
-	public void userServiceTest1() {
-		UserService userService =
-				(UserService) applicationContext.getBean("userService");
-		User user = new User("李四1", 10);
-		userService.add(user);
-	}
+
 
 	@Test
 	public void accountServiceTest1() {
@@ -101,13 +95,5 @@ public class ServiceTest {
 		}
 	}
 
-	@Test
-	public void mybatisTest2() {
-		// 获取accountService实例
-		UserService userService = (UserService) applicationContext.getBean("userService");
-		List<User> users= userService.findAllUser();
-		for (User user:users){
-			System.out.println(user);
-		}
-	}
+
 }
